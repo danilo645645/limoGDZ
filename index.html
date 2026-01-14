@@ -39,6 +39,42 @@ table{width:100%;border-collapse:collapse;margin-top:20px;font-size:14px}
 th,td{padding:12px;vertical-align:top;text-align:left}
 th{background:rgba(255,255,255,.18)}
 .back{display:inline-block;margin-top:18px}
+ 
+ /* ===== 📱 АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ ===== */
+@media (max-width: 600px) {
+
+  body {
+    padding: 12px;
+  }
+
+  .card {
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  a.btn {
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  .buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 </head>
 <body><div class="card">
