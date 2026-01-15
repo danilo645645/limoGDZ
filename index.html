@@ -188,13 +188,16 @@ async function askAI(){
       })
     });
 
-    const data = await res.json();
+const data = await res.json();
+console.log("Ответ сервера:", data);
 
-    if(data.answer){
-      a.innerText = data.answer;
-    }else{
-      a.innerText = "ИИ не дал ответ";
-    }
+// универсально
+a.innerText =
+  data.answer ||
+  data.reply ||
+  data.message ||
+  JSON.stringify(data, null, 2);
+
 
   }catch(err){
     console.error(err);
