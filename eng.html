@@ -40,48 +40,60 @@ th,td{padding:12px;vertical-align:top;text-align:left}
 th{background:rgba(255,255,255,.18)}
 .back{display:inline-block;margin-top:18px}
 
- /* 📱 UNIVERSAL MOBILE FIX — WORKS ON ALL PAGES */
+ /* ============================
+   📱 FINAL MOBILE VERSION
+   Работает на ВСЕХ страницах
+   ============================ */
 @media (max-width: 600px){
 
+  /* ОСНОВА */
   body{
     margin:0;
     padding:0;
     min-height:100vh;
-    display:block;              /* ❗ УБИРАЕМ FLEX */
+    display:block; /* ❗ важно */
     background:
       radial-gradient(circle at top, rgba(255,220,120,.3), transparent 60%),
       radial-gradient(circle at center, #3a2a00, #000 70%);
-    animation: fadeInBg .4s ease;
+    animation: bgFade .4s ease;
   }
 
+  /* КАРТОЧКА НА ВЕСЬ ЭКРАН */
   .card{
-    width:150%;
-    max-width:100%;
+    width:100%;
+    max-width:100%;     /* 🔥 убираем узкую ширину */
     min-height:100vh;
     margin:0;
-    padding:24px 20px;
+    padding:26px 22px;
     border-radius:0;
     display:flex;
     flex-direction:column;
-    justify-content:center;     /* 🔥 ВСЁ ПО ЦЕНТРУ */
-    animation: slideUp .5s ease;
+    justify-content:center;
+    animation: cardUp .5s ease;
   }
 
+  /* ТЕКСТ */
   h1{
     font-size:22px;
     margin-bottom:12px;
     animation: fadeIn .6s ease;
   }
 
-  p, table{
+  p{
     font-size:15px;
     animation: fadeIn .7s ease;
   }
 
+  table{
+    font-size:15px;
+    animation: fadeIn .7s ease;
+  }
+
+  /* КНОПКИ */
   .buttons{
     grid-template-columns:1fr;
     gap:16px;
-    margin-top:24px;
+    margin-top:26px;
   }
 
   a.btn{
@@ -90,8 +102,8 @@ th{background:rgba(255,255,255,.18)}
     animation: btnPop .6s ease;
   }
 
-  /* ✨ ANIMATIONS */
-  @keyframes slideUp{
+  /* АНИМАЦИИ */
+  @keyframes cardUp{
     from{transform:translateY(40px);opacity:0}
     to{transform:translateY(0);opacity:1}
   }
@@ -106,7 +118,7 @@ th{background:rgba(255,255,255,.18)}
     to{transform:scale(1);opacity:1}
   }
 
-  @keyframes fadeInBg{
+  @keyframes bgFade{
     from{opacity:0}
     to{opacity:1}
   }
