@@ -68,30 +68,33 @@ a.btn:hover{
 @media (max-width: 600px){
 
   body{
-    display:block;          /* ← ВАЖНО */
-    min-height:auto;
-    padding:16px;
+    display:block;
+    margin:0;
+    padding:0;
+    min-height:100vh;
   }
 
   .card{
+    width:100%;
     max-width:100%;
-    padding:20px;
-    border-radius:18px;
-    margin:0 auto;
+    min-height:100vh;
+    margin:0;
+    padding:24px 20px;
+    border-radius:0;       /* ← убираем скругление */
   }
 
-  h1{font-size:20px}
-  p{font-size:14px}
+  h1{font-size:22px}
+  p{font-size:15px}
 
   .buttons{
     grid-template-columns:1fr;
   }
 
   a.btn{
-    padding:16px;
+    padding:18px;
     font-size:16px;
   }
-}
+ }
 </style>
 </head>
 
