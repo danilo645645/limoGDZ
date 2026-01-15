@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>6Д — авто-ДЗ</title>
+
 <style>
 *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
 
@@ -17,12 +18,13 @@ body{
   radial-gradient(circle at top, rgba(255,220,120,.3), transparent 60%),
   radial-gradient(circle at center, #3a2a00, #000 70%);
  color:#f6e7a8;
+ overflow-x:hidden;
 }
 
 .card{
  width:100%;
  max-width:560px;
- margin: 0 auto;
+ margin:0 auto;
  background:rgba(255,255,255,.12);
  backdrop-filter:blur(18px);
  border-radius:22px;
@@ -64,230 +66,48 @@ a.btn:hover{
 
 .full{grid-column:span 2}
 
-/* 📱 MOBILE MODE */
-@media (max-width: 600px){
-
-  body{
-    margin:0;
-    padding:0;
-    min-height:100vh;
-    background:
-      radial-gradient(circle at top, rgba(255,220,120,.3), transparent 60%),
-      radial-gradient(circle at center, #3a2a00, #000 70%);
-  }
-
-  .card{
-    width:100%;
-    max-width:100%;
-    min-height:100vh;
-    margin:0;
-    padding:24px 20px;
-    border-radius:0;
-    animation: slideUp .5s ease;
-  }
-
-  /* 🔥 ТОЛЬКО ГЛАВНАЯ СТРАНИЦА */
-  body.home{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-
-  body.home .card{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-  }
-
-  body.home .buttons{
-    grid-template-columns:1fr;
-    margin-top:28px;
-    gap:16px;
-  }
-
-  body.home a.btn{
-    padding:18px;
-    font-size:16px;
-    animation: btnPop .6s ease;
-  }
-
-  /* ✨ АНИМАЦИИ */
-  @keyframes slideUp{
-    from{transform:translateY(40px);opacity:0}
-    to{transform:translateY(0);opacity:1}
-  }
-
-  @keyframes btnPop{
-    from{transform:scale(.96);opacity:0}
-    to{transform:scale(1);opacity:1}
-  }
+/* 📱 MOBILE */
+@media (max-width:600px){
+ .card{
+   max-width:100%;
+   min-height:100vh;
+   border-radius:0;
+   padding:24px 20px;
+ }
+ .buttons{grid-template-columns:1fr}
 }
 </style>
- <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>6Д — авто-ДЗ</title>
-<style>
-*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
 
-body{
- margin:0;
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- background:
-  radial-gradient(circle at top, rgba(255,220,120,.3), transparent 60%),
-  radial-gradient(circle at center, #3a2a00, #000 70%);
- color:#f6e7a8;
-}
-
-.card{
- width:100%;
- max-width:560px;
- background:rgba(255,255,255,.12);
- backdrop-filter:blur(18px);
- border-radius:22px;
- padding:26px;
- box-shadow:0 0 30px rgba(255,200,80,.45),
-            0 0 90px rgba(255,170,40,.35);
- border:1px solid rgba(255,220,150,.35);
-}
-
-h1{margin:0 0 10px}
-p{opacity:.95}
-
-.buttons{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px;
- margin-top:16px;
-}
-
-a{
- color:#f6e7a8;
- text-decoration:none;
-}
-
-a.btn{
- display:block;
- text-align:center;
- padding:14px;
- border-radius:14px;
- background:rgba(255,255,255,.18);
- box-shadow:0 0 10px rgba(255,210,120,.35);
- transition:.2s;
-}
-
-a.btn:hover{
- transform:translateY(-2px);
- box-shadow:0 0 20px rgba(255,210,120,.6);
-}
-
-.full{grid-column:span 2}
-
-/* 📱 MOBILE MODE */
-@media (max-width: 600px){
-
-  body{
-    margin:0;
-    padding:0;
-    min-height:100vh;
-    background:
-      radial-gradient(circle at top, rgba(255,220,120,.3), transparent 60%),
-      radial-gradient(circle at center, #3a2a00, #000 70%);
-  }
-
-  .card{
-    width:100%;
-    max-width:100%;
-    min-height:100vh;
-    margin:0;
-    padding:24px 20px;
-    border-radius:0;
-    animation: slideUp .5s ease;
-  }
-
-  /* 🔥 ТОЛЬКО ГЛАВНАЯ СТРАНИЦА */
-  body.home{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-
-  body.home .card{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-  }
-
-  body.home .buttons{
-    grid-template-columns:1fr;
-    margin-top:28px;
-    gap:16px;
-  }
-
-  body.home a.btn{
-    padding:18px;
-    font-size:16px;
-    animation: btnPop .6s ease;
-  }
-
-  /* ✨ АНИМАЦИИ */
-  @keyframes slideUp{
-    from{transform:translateY(40px);opacity:0}
-    to{transform:translateY(0);opacity:1}
-  }
-
-  @keyframes btnPop{
-    from{transform:scale(.96);opacity:0}
-    to{transform:scale(1);opacity:1}
-  }
-}
-</style>
- <!-- Yandex.Metrika counter -->
+<!-- Yandex.Metrika counter -->
 <script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106274390', 'ym');
+(function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1;
+ k.src=r;a.parentNode.insertBefore(k,a)
+})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-    ym(106274390, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+ym(106274390, "init", {
+ clickmap:true,
+ trackLinks:true,
+ accurateTrackBounce:true,
+ webvisor:true
+});
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/106274390" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
- 
-</head>
-
-<body class="home">
-<div class="card">
-  <h1>Теперь вам не нужно искать ГДЗ самим</h1>
-  <p>Просто откройте этот сайт - здесь будет всё ДЗ для 6 «Д».</p>
-
-  <div class="buttons">
-    <a class="btn" href="math.html">Математика</a>
-    <a class="btn" href="rus.html">Русский язык</a>
-    <a class="btn" href="eng.html">Английский язык</a>
-    <a class="btn" href="hist.html">История</a>
-    <a class="btn full" href="other.html">Другие предметы</a>
-  </div>
-
-  <p style="text-align:center;margin-top:16px;opacity:.7">
-    6 «Д» • авто-ДЗ
-  </p>
+<noscript>
+<div>
+<img src="https://mc.yandex.ru/watch/106274390"
+style="position:absolute; left:-9999px;" alt="">
 </div>
-</body>
-</html>
+</noscript>
+<!-- /Yandex.Metrika counter -->
+
 </head>
 
-<body class="home">
+<body>
 <div class="card">
   <h1>Теперь вам не нужно искать ГДЗ самим</h1>
-  <p>Просто откройте этот сайт - здесь будет всё ДЗ для 6 «Д».</p>
+  <p>Просто откройте этот сайт — здесь будет всё ДЗ для 6 «Д».</p>
 
   <div class="buttons">
     <a class="btn" href="math.html">Математика</a>
