@@ -40,38 +40,74 @@ th,td{padding:12px;vertical-align:top;text-align:left}
 th{background:rgba(255,255,255,.18)}
 .back{display:inline-block;margin-top:18px}
 
- /* ===== 📱 АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ ===== */
-@media (max-width: 600px) {
+ /* 📱 MOBILE APP MODE */
+@media (max-width: 600px){
 
-  body {
-    padding: 12px;
+  body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation: fadeBg .6s ease;
   }
 
-  .card {
-    max-width: 100%;
-    padding: 20px;
-    border-radius: 18px;
+  .card{
+    width:100%;
+    max-width:100%;
+    min-height:100vh;
+    margin:0;
+    padding:28px 22px;
+    border-radius:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center; /* 🔥 ЦЕНТР МЕНЮ */
+    animation: slideUp .6s ease;
   }
 
-  h1 {
-    font-size: 20px;
+  h1{
+    font-size:22px;
+    margin-bottom:12px;
+    animation: fadeIn .8s ease;
   }
 
-  p {
-    font-size: 14px;
+  p{
+    font-size:15px;
+    animation: fadeIn .9s ease;
   }
 
-  table {
-    font-size: 13px;
+  .buttons{
+    grid-template-columns:1fr;
+    margin-top:28px;
+    gap:16px;
   }
 
-  a.btn {
-    padding: 16px;
-    font-size: 16px;
+  a.btn{
+    padding:18px;
+    font-size:16px;
+    animation: btnPop .7s ease;
   }
 
-  .buttons {
-    grid-template-columns: 1fr;
+  /* ✨ АНИМАЦИИ */
+  @keyframes slideUp{
+    from{transform:translateY(40px);opacity:0}
+    to{transform:translateY(0);opacity:1}
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+  }
+
+  @keyframes btnPop{
+    from{transform:scale(.96);opacity:0}
+    to{transform:scale(1);opacity:1}
+  }
+
+  @keyframes fadeBg{
+    from{opacity:0}
+    to{opacity:1}
   }
 }
 
