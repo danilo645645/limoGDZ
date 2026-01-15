@@ -78,7 +78,7 @@ a.btn:hover{
 }
 </style>
 
-<!-- Yandex.Metrika counter -->
+<!-- Yandex.Metrika -->
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){
  m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -95,12 +95,10 @@ ym(106274390, "init", {
 });
 </script>
 <noscript>
-<div>
 <img src="https://mc.yandex.ru/watch/106274390"
 style="position:absolute; left:-9999px;" alt="">
-</div>
 </noscript>
-<!-- /Yandex.Metrika counter -->
+<!-- /Yandex.Metrika -->
 
 </head>
 
@@ -120,71 +118,90 @@ style="position:absolute; left:-9999px;" alt="">
   <p style="text-align:center;margin-top:16px;opacity:.7">
     6 «Д» • авто-ДЗ
   </p>
-<hr style="margin:24px 0;opacity:.3">
 
-<h2>Задать вопрос ИИ</h2>
-<p style="opacity:.8">
-Можно спросить по домашке — помогу разобраться 👇
-</p>
+  <hr style="margin:24px 0;opacity:.3">
 
-<textarea id="q"
-  placeholder="Например: объясни №270 по математике"
-  style="
-    width:100%;
-    min-height:80px;
-    padding:12px;
-    border-radius:12px;
-    border:none;
-    resize:vertical;
-    background:rgba(255,255,255,.15);
-    color:#f6e7a8;
-  "
-></textarea>
+  <h2>Задать вопрос ИИ</h2>
+  <p style="opacity:.8">
+    Можно спросить по домашке - помогу разобраться 👇
+  </p>
 
-<button onclick="send()"
-  style="
-    margin-top:12px;
-    width:100%;
-    padding:14px;
-    border-radius:14px;
-    border:none;
-    background:rgba(255,255,255,.25);
-    color:#f6e7a8;
-    font-size:16px;
-    cursor:pointer;
-  "
->
-Отправить
-</button>
+  <textarea id="question"
+    placeholder="Например: объясни №270 по математике"
+    style="
+      width:100%;
+      min-height:90px;
+      padding:12px;
+      border-radius:12px;
+      border:none;
+      resize:vertical;
+      background:rgba(255,255,255,.15);
+      color:#f6e7a8;
+    "
+  ></textarea>
 
-<div id="a"
-  style="
-    margin-top:16px;
-    white-space:pre-wrap;
-    line-height:1.5;
-  "
-></div>
+  <button onclick="askAI()"
+    style="
+      margin-top:12px;
+      width:100%;
+      padding:14px;
+      border-radius:14px;
+      border:none;
+      background:rgba(255,255,255,.25);
+      color:#f6e7a8;
+      font-size:16px;
+      cursor:pointer;
+    "
+  >
+    Отправить
+  </button>
+
+  <div id="answer"
+    style="
+      margin-top:16px;
+      white-space:pre-wrap;
+      line-height:1.5;
+    "
+  ></div>
+</div>
 
 <script>
-async function send(){
-  const q = document.getElementById("q");
-  const a = document.getElementById("a");
+async function askAI(){
+  const q = document.getElementById("question").value.trim();
+  const a = document.getElementById("answer");
+
+  if(!q){
+    a.innerText = "Введите вопрос 🙂";
+    return;
+  }
+
   a.innerText = "Думаю… 🤔";
 
   try{
-    const r = await fetch("https://gdz-ai-server.onrender.com/chat", {
+    const res = await fetch("https://gdz-ai-server.onrender.com/ask", {
       method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ message: q.value })
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        question: q
+      })
     });
 
-    const d = await r.json();
-    a.innerText = d.reply || "Нет ответа";
-  }catch(e){
+    const data = await res.json();
+
+    if(data.answer){
+      a.innerText = data.answer;
+    }else{
+      a.innerText = "ИИ не дал ответ";
+    }
+
+  }catch(err){
+    console.error(err);
     a.innerText = "Ошибка соединения 😢";
   }
 }
 </script>
-</div>
+
 </body>
 </html>
