@@ -6,205 +6,102 @@
 <title>6Д — авто-ДЗ</title>
 
 <style>
-*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+*{
+  box-sizing:border-box;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif
+}
 
 body{
- margin:0;
- min-height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- background:
-  radial-gradient(circle at top, rgba(255,220,120,.3), transparent 60%),
-  radial-gradient(circle at center, #3a2a00, #000 70%);
- color:#f6e7a8;
- overflow-x:hidden;
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at top, rgba(255,220,120,.3), transparent 60%),
+    radial-gradient(circle at center, #3a2a00, #000 70%);
+  color:#f6e7a8;
 }
 
 .card{
- width:100%;
- max-width:560px;
- margin:0 auto;
- background:rgba(255,255,255,.12);
- backdrop-filter:blur(18px);
- border-radius:22px;
- padding:26px;
- box-shadow:0 0 30px rgba(255,200,80,.45),
-            0 0 90px rgba(255,170,40,.35);
- border:1px solid rgba(255,220,150,.35);
+  width:100%;
+  max-width:560px;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(18px);
+  border-radius:22px;
+  padding:26px;
+  box-shadow:
+    0 0 30px rgba(255,200,80,.45),
+    0 0 90px rgba(255,170,40,.35);
+  border:1px solid rgba(255,220,150,.35);
 }
 
 h1{margin:0 0 10px}
 p{opacity:.95}
 
 .buttons{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px;
- margin-top:16px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:16px;
 }
 
 a{
- color:#f6e7a8;
- text-decoration:none;
+  color:#f6e7a8;
+  text-decoration:none;
 }
 
 a.btn{
- display:block;
- text-align:center;
- padding:14px;
- border-radius:14px;
- background:rgba(255,255,255,.18);
- box-shadow:0 0 10px rgba(255,210,120,.35);
- transition:.2s;
+  display:block;
+  text-align:center;
+  padding:14px;
+  border-radius:14px;
+  background:rgba(255,255,255,.18);
+  box-shadow:0 0 10px rgba(255,210,120,.35);
+  transition:.2s;
 }
 
 a.btn:hover{
- transform:translateY(-2px);
- box-shadow:0 0 20px rgba(255,210,120,.6);
+  transform:translateY(-2px);
+  box-shadow:0 0 20px rgba(255,210,120,.6);
 }
 
-.full{grid-column:span 2}
+.full{
+  grid-column:span 2;
+}
 
 /* 📱 MOBILE */
 @media (max-width:600px){
- .card{
-   max-width:100%;
-   min-height:100vh;
-   border-radius:0;
-   padding:24px 20px;
- }
- .buttons{grid-template-columns:1fr}
+  .card{
+    max-width:100%;
+    min-height:100vh;
+    border-radius:0;
+    padding:24px 20px;
+  }
+
+  .buttons{
+    grid-template-columns:1fr;
+  }
 }
 </style>
-
-<!-- Yandex.Metrika -->
-<script type="text/javascript">
-(function(m,e,t,r,i,k,a){
- m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
- m[i].l=1*new Date();
- k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1;
- k.src=r;a.parentNode.insertBefore(k,a)
-})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-ym(106274390, "init", {
- clickmap:true,
- trackLinks:true,
- accurateTrackBounce:true,
- webvisor:true
-});
-</script>
-<noscript>
-<img src="https://mc.yandex.ru/watch/106274390"
-style="position:absolute; left:-9999px;" alt="">
-</noscript>
-<!-- /Yandex.Metrika -->
-
 </head>
 
 <body>
-<div class="card">
-  <h1>Теперь вам не нужно искать ГДЗ самим</h1>
-  <p>Просто откройте этот сайт — здесь будет всё ДЗ для 6 «Д».</p>
+  <div class="card">
+    <h1>Теперь вам не нужно искать ГДЗ самим</h1>
+    <p>Просто откройте этот сайт — здесь будет всё ДЗ для 6 «Д».</p>
 
-  <div class="buttons">
-    <a class="btn" href="math.html">Математика</a>
-    <a class="btn" href="rus.html">Русский язык</a>
-    <a class="btn" href="eng.html">Английский язык</a>
-    <a class="btn" href="hist.html">История</a>
-    <a class="btn full" href="other.html">Другие предметы</a>
+    <div class="buttons">
+      <a class="btn" href="math.html">Математика</a>
+      <a class="btn" href="rus.html">Русский язык</a>
+      <a class="btn" href="eng.html">Английский язык</a>
+      <a class="btn" href="hist.html">История</a>
+      <a class="btn full" href="other.html">Другие предметы</a>
+    </div>
+
+    <p style="text-align:center;margin-top:16px;opacity:.7">
+      6 «Д» • авто-ДЗ
+    </p>
   </div>
-
-  <p style="text-align:center;margin-top:16px;opacity:.7">
-    6 «Д» • авто-ДЗ
-  </p>
-
-  <hr style="margin:24px 0;opacity:.3">
-
-  <h2>Задать вопрос ИИ</h2>
-  <p style="opacity:.8">
-    Можно спросить по домашке - помогу разобраться 👇
-  </p>
-
-  <textarea id="question"
-    placeholder="Например: объясни №270 по математике"
-    style="
-      width:100%;
-      min-height:90px;
-      padding:12px;
-      border-radius:12px;
-      border:none;
-      resize:vertical;
-      background:rgba(255,255,255,.15);
-      color:#f6e7a8;
-    "
-  ></textarea>
-
-  <button onclick="askAI()"
-    style="
-      margin-top:12px;
-      width:100%;
-      padding:14px;
-      border-radius:14px;
-      border:none;
-      background:rgba(255,255,255,.25);
-      color:#f6e7a8;
-      font-size:16px;
-      cursor:pointer;
-    "
-  >
-    Отправить
-  </button>
-
-  <div id="answer"
-    style="
-      margin-top:16px;
-      white-space:pre-wrap;
-      line-height:1.5;
-    "
-  ></div>
-</div>
-
-<script>
-async function askAI(){
-  const q = document.getElementById("question").value.trim();
-  const a = document.getElementById("answer");
-
-  if(!q){
-    a.innerText = "Введите вопрос 🙂";
-    return;
-  }
-
-  a.innerText = "Думаю… 🤔";
-
-  try{
-    const res = await fetch("https://gdz-ai-server.onrender.com/ask", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        question: q
-      })
-    });
-
-const data = await res.json();
-console.log("Ответ сервера:", data);
-
-// универсально
-a.innerText =
-  data.answer ||
-  data.reply ||
-  data.message ||
-  JSON.stringify(data, null, 2);
-
-
-  }catch(err){
-    console.error(err);
-    a.innerText = "Ошибка соединения 😢";
-  }
-}
-</script>
-
 </body>
 </html>
