@@ -64,14 +64,17 @@ a.btn:hover{
 
 .full{grid-column:span 2}
 
-/* 📱 МОБИЛЬНАЯ ВЕРСИЯ — КЛЮЧЕВОЙ ФИКС */
+/* 📱 MOBILE APP MODE */
 @media (max-width: 600px){
 
   body{
-    display:block;
     margin:0;
     padding:0;
     min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation: fadeBg .6s ease;
   }
 
   .card{
@@ -79,20 +82,56 @@ a.btn:hover{
     max-width:100%;
     min-height:100vh;
     margin:0;
-    padding:24px 20px;
-    border-radius:0;       /* ← убираем скругление */
+    padding:28px 22px;
+    border-radius:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center; /* 🔥 ЦЕНТР МЕНЮ */
+    animation: slideUp .6s ease;
   }
 
-  h1{font-size:22px}
-  p{font-size:15px}
+  h1{
+    font-size:22px;
+    margin-bottom:12px;
+    animation: fadeIn .8s ease;
+  }
+
+  p{
+    font-size:15px;
+    animation: fadeIn .9s ease;
+  }
 
   .buttons{
     grid-template-columns:1fr;
+    margin-top:28px;
+    gap:16px;
   }
 
   a.btn{
     padding:18px;
     font-size:16px;
+    animation: btnPop .7s ease;
+  }
+
+  /* ✨ АНИМАЦИИ */
+  @keyframes slideUp{
+    from{transform:translateY(40px);opacity:0}
+    to{transform:translateY(0);opacity:1}
+  }
+
+  @keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+  }
+
+  @keyframes btnPop{
+    from{transform:scale(.96);opacity:0}
+    to{transform:scale(1);opacity:1}
+  }
+
+  @keyframes fadeBg{
+    from{opacity:0}
+    to{opacity:1}
   }
  }
 </style>
