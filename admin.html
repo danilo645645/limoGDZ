@@ -1,0 +1,37 @@
+
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8">
+<title>Админка GDZ</title>
+<style>
+body{font-family:system-ui;background:#111;color:#f6e7a8;padding:20px}
+textarea{width:100%;height:110px;margin-bottom:10px}
+button{padding:10px 14px}
+</style></head><body>
+<h1>Админка недели</h1>
+<p>Заполни ДЗ (каждое с новой строки) → скачай <b>week.json</b> → залей в <code>data/</code>.</p>
+
+<label>Математика</label><textarea id="math"></textarea>
+<label>Русский</label><textarea id="rus"></textarea>
+<label>Английский</label><textarea id="eng"></textarea>
+<label>История</label><textarea id="hist"></textarea>
+<label>Другое</label><textarea id="other"></textarea>
+
+<button onclick="download()">Скачать week.json</button>
+
+<script>
+function download(){
+ const data={
+  weekStart:new Date().toISOString().slice(0,10),
+  subjects:{
+   math:math.value.split('\n').filter(Boolean),
+   rus:rus.value.split('\n').filter(Boolean),
+   eng:eng.value.split('\n').filter(Boolean),
+   hist:hist.value.split('\n').filter(Boolean),
+   other:other.value.split('\n').filter(Boolean)
+  }
+ };
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download='week.json';a.click();
+}
+</script>
+</body></html>
