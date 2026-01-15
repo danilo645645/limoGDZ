@@ -40,17 +40,16 @@ th,td{padding:12px;vertical-align:top;text-align:left}
 th{background:rgba(255,255,255,.18)}
 .back{display:inline-block;margin-top:18px}
 
- /* 📱 MOBILE APP MODE */
+ /* 📱 MOBILE MODE */
 @media (max-width: 600px){
 
   body{
     margin:0;
     padding:0;
     min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    animation: fadeBg .6s ease;
+    background:
+      radial-gradient(circle at top, rgba(255,220,120,.3), transparent 60%),
+      radial-gradient(circle at center, #3a2a00, #000 70%);
   }
 
   .card{
@@ -58,35 +57,34 @@ th{background:rgba(255,255,255,.18)}
     max-width:100%;
     min-height:100vh;
     margin:0;
-    padding:28px 22px;
+    padding:24px 20px;
     border-radius:0;
+    animation: slideUp .5s ease;
+  }
+
+  /* 🔥 ТОЛЬКО ГЛАВНАЯ СТРАНИЦА */
+  body.home{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  body.home .card{
     display:flex;
     flex-direction:column;
-    justify-content:center; /* 🔥 ЦЕНТР МЕНЮ */
-    animation: slideUp .6s ease;
+    justify-content:center;
   }
 
-  h1{
-    font-size:22px;
-    margin-bottom:12px;
-    animation: fadeIn .8s ease;
-  }
-
-  p{
-    font-size:15px;
-    animation: fadeIn .9s ease;
-  }
-
-  .buttons{
+  body.home .buttons{
     grid-template-columns:1fr;
     margin-top:28px;
     gap:16px;
   }
 
-  a.btn{
+  body.home a.btn{
     padding:18px;
     font-size:16px;
-    animation: btnPop .7s ease;
+    animation: btnPop .6s ease;
   }
 
   /* ✨ АНИМАЦИИ */
@@ -95,19 +93,9 @@ th{background:rgba(255,255,255,.18)}
     to{transform:translateY(0);opacity:1}
   }
 
-  @keyframes fadeIn{
-    from{opacity:0}
-    to{opacity:1}
-  }
-
   @keyframes btnPop{
     from{transform:scale(.96);opacity:0}
     to{transform:scale(1);opacity:1}
-  }
-
-  @keyframes fadeBg{
-    from{opacity:0}
-    to{opacity:1}
   }
 }
 </style>
