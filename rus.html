@@ -39,24 +39,46 @@ a.back{display:inline-block;margin-top:18px}
  .card{padding:22px}
  .buttons{grid-template-columns:1fr}
 }
+
+/* ==== FIX FOR RUSSIAN TEXT (MOBILE SAFE) ==== */
+.card,
+.card p,
+.card b,
+.card span,
+.card li {
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto;
+  text-align: left !important;
+  line-height: 1.55;
+}
 </style>
 </head>
- <!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106274390', 'ym');
 
-    ym(106274390, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+})(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106274390', 'ym');
+ym(106274390, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/106274390" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/106274390" style="position:absolute; left:-9999px;" alt=""></div></noscript>
 <!-- /Yandex.Metrika counter -->
+
 <body>
+
 <div class="card">
-<h1><svg viewBox="0 0 24 24" class="ico"><path d="M6 3h12a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>Русский язык</h1>
+<h1>
+<svg viewBox="0 0 24 24" class="ico">
+<path d="M6 3h12a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+</svg>
+Русский язык
+</h1>
 
 <h2>Упражнение 446</h2>
 
@@ -66,13 +88,10 @@ a.back{display:inline-block;margin-top:18px}
 <p>
 <b>деревян<span style="color:#ffd86a;font-weight:bold">н</span>ый</b> —
 пишется одна <b>Н</b>, так как прилагательное образовано от существительного <i>дерево</i> с суффиксом <b>-ЯН-</b>.<br>
-
 <b>глин<span style="color:#ffd86a;font-weight:bold">я</span>ный</b> —
 суффикс <b>-ЯН-</b>, поэтому пишется одна <b>Н</b>.<br>
-
 <b>серебр<span style="color:#ffd86a;font-weight:bold">ян</span>ый</b> —
 суффикс <b>-ЯН-</b>, пишется одна <b>Н</b>.<br>
-
 <b>кож<span style="color:#ffd86a;font-weight:bold">ан</span>ый</b> —
 суффикс <b>-АН-</b>, пишется одна <b>Н</b>.
 </p>
@@ -81,53 +100,28 @@ a.back{display:inline-block;margin-top:18px}
 <p>
 <b>городск<span style="color:#ffd86a;font-weight:bold">ой</span></b> —
 суффикс <b>-СК-</b>, образовано от слова <i>город</i>.<br>
-
 <b>сельск<span style="color:#ffd86a;font-weight:bold">ий</span></b> —
 суффикс <b>-СК-</b>, образовано от слова <i>село</i>.<br>
-
 <b>подземн<span style="color:#ffd86a;font-weight:bold">ый</span></b> —
 относительное прилагательное, пишется одна <b>Н</b>.
 </p>
 
 <h3>в) По времени</h3>
 <p>
-<b>сегодняшн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>завтрашн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>осенн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>зимн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>вечерн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>утренн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
+<b>сегодняшн<span style="color:#ffd86a;font-weight:bold">ий</span></b>,
+<b>завтрашн<span style="color:#ffd86a;font-weight:bold">ий</span></b>,
+<b>осенн<span style="color:#ffd86a;font-weight:bold">ий</span></b>,
+<b>зимн<span style="color:#ffd86a;font-weight:bold">ий</span></b>,
+<b>вечерн<span style="color:#ffd86a;font-weight:bold">ий</span></b>,
+<b>утренн<span style="color:#ffd86a;font-weight:bold">ий</span></b>,
 <b>давнишн<span style="color:#ffd86a;font-weight:bold">ий</span></b><br>
-
-— во всех словах пишется <b>НН</b>, так как они образованы с суффиксом <b>-ЕНН-</b> и обозначают время.
-</p>
-
-<h3>г) По действию / признаку</h3>
-<p>
-<b>отрывн<span style="color:#ffd86a;font-weight:bold">ой</span></b> —
-относительное прилагательное, пишется одна <b>Н</b>.<br>
-
-<b>нагревательн<span style="color:#ffd86a;font-weight:bold">ый</span></b> —
-образовано от существительного, пишется одна <b>Н</b>.<br>
-
-<b>врем<span style="color:#ffd86a;font-weight:bold">енн</span>ый</b> —
-суффикс <b>-ЕНН-</b>, поэтому пишется <b>НН</b>.<br>
-
-<b>сем<span style="color:#ffd86a;font-weight:bold">енн</span>ой</b> —
-суффикс <b>-ЕНН-</b>, пишется <b>НН</b>.
-</p>
-
-<h3>Пример из задания</h3>
-<p>
-<b>язык<span style="color:#ffd86a;font-weight:bold">ов</span>ое</b> (явление), 
-<b>язык<span style="color:#ffd86a;font-weight:bold">ов</span>ая</b> (колбаса) —
-суффикс <b>-ОВ-</b>, относительные прилагательные.
+— во всех словах пишется <b>НН</b>, так как они образованы с суффиксом <b>-ЕНН-</b>.
 </p>
 
 <a class="back" href="index.html">← Назад</a>
-
 </div>
 
+<!-- COLOR WHEEL (БЕЗ ИЗМЕНЕНИЙ) -->
 <div id="colorWheel" style="
  position:fixed;
  bottom:20px;
@@ -140,22 +134,9 @@ a.back{display:inline-block;margin-top:18px}
  gap:8px;
  z-index:9999;
 ">
-
-<label title="Подсветка фона">
- <input id="accentPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
-<label title="Фон">
- <input id="bgPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
-<label title="Интерфейс (текст, обводка, glow)">
- <input id="uiPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
+<label><input id="accentPicker" type="color" style="width:42px;height:42px;border-radius:50%;border:none"></label>
+<label><input id="bgPicker" type="color" style="width:42px;height:42px;border-radius:50%;border:none"></label>
+<label><input id="uiPicker" type="color" style="width:42px;height:42px;border-radius:50%;border:none"></label>
 </div>
 
 <script>
@@ -164,7 +145,6 @@ const acc=document.getElementById('accentPicker');
 const bg=document.getElementById('bgPicker');
 const ui=document.getElementById('uiPicker');
 
-// load saved
 acc.value=localStorage.getItem('accent')||'#ffcc66';
 bg.value=localStorage.getItem('bg')||'#000000';
 ui.value=localStorage.getItem('ui')||'#ffdd99';
@@ -173,142 +153,10 @@ root.style.setProperty('--accent-color', acc.value);
 root.style.setProperty('--bg-color', bg.value);
 root.style.setProperty('--ui-color', ui.value);
 
-// live update
-acc.oninput=()=>{
- root.style.setProperty('--accent-color', acc.value);
- localStorage.setItem('accent', acc.value);
-};
-bg.oninput=()=>{
- root.style.setProperty('--bg-color', bg.value);
- localStorage.setItem('bg', bg.value);
-};
-ui.oninput=()=>{
- root.style.setProperty('--ui-color', ui.value);
- localStorage.setItem('ui', ui.value);
-};
+acc.oninput=()=>{root.style.setProperty('--accent-color',acc.value);localStorage.setItem('accent',acc.value);}
+bg.oninput=()=>{root.style.setProperty('--bg-color',bg.value);localStorage.setItem('bg',bg.value);}
+ui.oninput=()=>{root.style.setProperty('--ui-color',ui.value);localStorage.setItem('ui',ui.value);}
 </script>
+
 </body>
-
-</html>
-суффикс <b>-ЯН-</b>, поэтому пишется одна <b>Н</b>.<br>
-
-<b>серебр<span style="color:#ffd86a;font-weight:bold">ян</span>ый</b> —
-суффикс <b>-ЯН-</b>, пишется одна <b>Н</b>.<br>
-
-<b>кож<span style="color:#ffd86a;font-weight:bold">ан</span>ый</b> —
-суффикс <b>-АН-</b>, пишется одна <b>Н</b>.
-</p>
-
-<h3>б) По месту</h3>
-<p>
-<b>городск<span style="color:#ffd86a;font-weight:bold">ой</span></b> —
-суффикс <b>-СК-</b>, образовано от слова <i>город</i>.<br>
-
-<b>сельск<span style="color:#ffd86a;font-weight:bold">ий</span></b> —
-суффикс <b>-СК-</b>, образовано от слова <i>село</i>.<br>
-
-<b>подземн<span style="color:#ffd86a;font-weight:bold">ый</span></b> —
-относительное прилагательное, пишется одна <b>Н</b>.
-</p>
-
-<h3>в) По времени</h3>
-<p>
-<b>сегодняшн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>завтрашн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>осенн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>зимн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>вечерн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>утренн<span style="color:#ffd86a;font-weight:bold">ий</span></b>, 
-<b>давнишн<span style="color:#ffd86a;font-weight:bold">ий</span></b><br>
-
-— во всех словах пишется <b>НН</b>, так как они образованы с суффиксом <b>-ЕНН-</b> и обозначают время.
-</p>
-
-<h3>г) По действию / признаку</h3>
-<p>
-<b>отрывн<span style="color:#ffd86a;font-weight:bold">ой</span></b> —
-относительное прилагательное, пишется одна <b>Н</b>.<br>
-
-<b>нагревательн<span style="color:#ffd86a;font-weight:bold">ый</span></b> —
-образовано от существительного, пишется одна <b>Н</b>.<br>
-
-<b>врем<span style="color:#ffd86a;font-weight:bold">енн</span>ый</b> —
-суффикс <b>-ЕНН-</b>, поэтому пишется <b>НН</b>.<br>
-
-<b>сем<span style="color:#ffd86a;font-weight:bold">енн</span>ой</b> —
-суффикс <b>-ЕНН-</b>, пишется <b>НН</b>.
-</p>
-
-<h3>Пример из задания</h3>
-<p>
-<b>язык<span style="color:#ffd86a;font-weight:bold">ов</span>ое</b> (явление), 
-<b>язык<span style="color:#ffd86a;font-weight:bold">ов</span>ая</b> (колбаса) —
-суффикс <b>-ОВ-</b>, относительные прилагательные.
-</p>
-
-<a class="back" href="index.html">← Назад</a>
-
-</div>
-
-<div id="colorWheel" style="
- position:fixed;
- bottom:20px;
- right:20px;
- background:rgba(0,0,0,.45);
- padding:10px;
- border-radius:18px;
- backdrop-filter:blur(10px);
- display:flex;
- gap:8px;
- z-index:9999;
-">
-
-<label title="Подсветка фона">
- <input id="accentPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
-<label title="Фон">
- <input id="bgPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
-<label title="Интерфейс (текст, обводка, glow)">
- <input id="uiPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
-</div>
-
-<script>
-const root=document.documentElement;
-const acc=document.getElementById('accentPicker');
-const bg=document.getElementById('bgPicker');
-const ui=document.getElementById('uiPicker');
-
-// load saved
-acc.value=localStorage.getItem('accent')||'#ffcc66';
-bg.value=localStorage.getItem('bg')||'#000000';
-ui.value=localStorage.getItem('ui')||'#ffdd99';
-
-root.style.setProperty('--accent-color', acc.value);
-root.style.setProperty('--bg-color', bg.value);
-root.style.setProperty('--ui-color', ui.value);
-
-// live update
-acc.oninput=()=>{
- root.style.setProperty('--accent-color', acc.value);
- localStorage.setItem('accent', acc.value);
-};
-bg.oninput=()=>{
- root.style.setProperty('--bg-color', bg.value);
- localStorage.setItem('bg', bg.value);
-};
-ui.oninput=()=>{
- root.style.setProperty('--ui-color', ui.value);
- localStorage.setItem('ui', ui.value);
-};
-</script>
-</body>
-
 </html>
