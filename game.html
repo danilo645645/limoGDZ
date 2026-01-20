@@ -1,1 +1,450 @@
 
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Мини-игра - Block Puzzle</title>
+  <style>
+    :root{
+      --bg1:#0b5fa8;
+      --bg2:#0aa2df;
+      --panel:#103d68;
+      --grid:#1b4e7a;
+      --cell:#163f63;
+      --cell2:#1c4b73;
+      --line:#2a6b9a;
+      --white:#ffffff;
+      --orange:#ff8a1a;
+      --blue:#3b5bff;
+    }
+
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--white);
+    }
+
+    .wrap{
+      width:min(1100px,96vw);
+      display:grid;
+      grid-template-columns: 1fr 320px;
+      gap:24px;
+      align-items:start;
+      padding:24px;
+    }
+
+    .topbar{
+      grid-column:1 / -1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .topbar .left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:700;
+    }
+
+    .pill{
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.18);
+      padding:8px 12px;
+      border-radius:14px;
+    }
+
+    .btn{
+      cursor:pointer;
+      border:none;
+      border-radius:14px;
+      padding:10px 14px;
+      color:var(--white);
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.18);
+      font-weight:600;
+    }
+    .btn:hover{filter:brightness(1.08);}
+
+    .board{
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
+    }
+
+    .grid{
+      width:100%;
+      aspect-ratio:1/1;
+      display:grid;
+      grid-template-columns:repeat(10,1fr);
+      gap:6px;
+      background:rgba(0,0,0,.12);
+      padding:12px;
+      border-radius:14px;
+    }
+
+    .cell{
+      background:linear-gradient(180deg,var(--cell2),var(--cell));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:8px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .cell.filled{
+      border:1px solid rgba(255,255,255,.22);
+    }
+
+    .cell.filled.orange{
+      background:linear-gradient(180deg,#ffb25a,#ff7b00);
+    }
+    .cell.filled.blue{
+      background:linear-gradient(180deg,#6e7bff,#2f46ff);
+    }
+
+    .side{
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-height:520px;
+    }
+
+    .pieces{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-top:6px;
+    }
+
+    .piece{
+      width:100%;
+      background:rgba(0,0,0,.14);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:14px;
+      padding:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:grab;
+      user-select:none;
+      min-height:90px;
+    }
+    .piece:active{cursor:grabbing;}
+
+    .mini{
+      display:grid;
+      gap:6px;
+      grid-auto-flow:row;
+      justify-content:center;
+      align-content:center;
+    }
+
+    .miniCell{
+      width:24px;height:24px;
+      border-radius:6px;
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .miniCell.orange{
+      background:linear-gradient(180deg,#ffb25a,#ff7b00);
+    }
+    .miniCell.blue{
+      background:linear-gradient(180deg,#6e7bff,#2f46ff);
+    }
+
+    .hint{
+      font-size:13px;
+      opacity:.9;
+      line-height:1.35;
+    }
+
+    .msg{
+      margin-top:auto;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.12);
+      font-size:13px;
+      min-height:44px;
+    }
+
+    @media (max-width: 900px){
+      .wrap{grid-template-columns:1fr; }
+      .side{min-height:auto;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="left">
+        <div class="pill">Очки: <span id="score">0</span></div>
+        <div class="pill">Линии: <span id="lines">0</span></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <a class="btn" href="index.html" style="text-decoration:none;display:inline-block;">В меню</a>
+        <button class="btn" id="newGame">Новая игра</button>
+      </div>
+    </div>
+
+    <div class="board">
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <div class="side">
+      <div style="font-weight:800;font-size:18px;">Фигуры</div>
+      <div class="hint">
+        Перетащи фигуру на поле. Заполняй строки или столбцы - они исчезают и дают очки.
+      </div>
+      <div class="pieces" id="pieces"></div>
+      <div class="msg" id="msg">Готово. Перетащи любую фигуру на поле.</div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const SIZE = 10;
+  const gridEl = document.getElementById('grid');
+  const piecesEl = document.getElementById('pieces');
+  const scoreEl = document.getElementById('score');
+  const linesEl = document.getElementById('lines');
+  const msgEl = document.getElementById('msg');
+  const newGameBtn = document.getElementById('newGame');
+
+  let board = Array.from({length: SIZE}, () => Array(SIZE).fill(null));
+  let score = 0;
+  let lines = 0;
+
+  // Несколько базовых фигур (можно расширить)
+  // Каждая фигура: массив координат [x,y] от (0,0)
+  const SHAPES = [
+    // линия 4
+    [[0,0],[1,0],[2,0],[3,0]],
+    // квадрат 2x2
+    [[0,0],[1,0],[0,1],[1,1]],
+    // прямоугольник 3x2
+    [[0,0],[1,0],[2,0],[0,1],[1,1],[2,1]],
+    // L 3x3 (угол)
+    [[0,0],[0,1],[0,2],[1,2],[2,2]],
+    // T
+    [[0,0],[1,0],[2,0],[1,1]],
+    // одиночный
+    [[0,0]],
+    // 3 в ряд
+    [[0,0],[1,0],[2,0]],
+    // 5 в ряд
+    [[0,0],[1,0],[2,0],[3,0],[4,0]],
+    // "ступенька"
+    [[0,1],[1,1],[1,0],[2,0]],
+  ];
+
+  const COLORS = ['orange','blue'];
+
+  function rnd(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  function renderBoard(){
+    gridEl.innerHTML = '';
+    for(let y=0;y<SIZE;y++){
+      for(let x=0;x<SIZE;x++){
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.x = x;
+        cell.dataset.y = y;
+
+        const v = board[y][x];
+        if(v){
+          cell.classList.add('filled', v);
+        }
+
+        // drop target
+        cell.addEventListener('dragover', (e) => e.preventDefault());
+        cell.addEventListener('drop', onDrop);
+
+        gridEl.appendChild(cell);
+      }
+    }
+  }
+
+  function shapeBounds(shape){
+    let maxX = 0, maxY = 0;
+    for(const [x,y] of shape){ if(x>maxX) maxX=x; if(y>maxY) maxY=y; }
+    return {w:maxX+1, h:maxY+1};
+  }
+
+  function canPlace(shape, ox, oy){
+    for(const [x,y] of shape){
+      const px = ox + x, py = oy + y;
+      if(px<0 || py<0 || px>=SIZE || py>=SIZE) return false;
+      if(board[py][px]) return false;
+    }
+    return true;
+  }
+
+  function place(shape, ox, oy, color){
+    for(const [x,y] of shape){
+      board[oy+y][ox+x] = color;
+    }
+  }
+
+  function clearLines(){
+    let cleared = 0;
+
+    // rows
+    for(let y=0;y<SIZE;y++){
+      if(board[y].every(Boolean)){
+        board[y] = Array(SIZE).fill(null);
+        cleared++;
+      }
+    }
+
+    // cols
+    for(let x=0;x<SIZE;x++){
+      let full = true;
+      for(let y=0;y<SIZE;y++){
+        if(!board[y][x]){ full=false; break; }
+      }
+      if(full){
+        for(let y=0;y<SIZE;y++) board[y][x] = null;
+        cleared++;
+      }
+    }
+
+    if(cleared>0){
+      lines += cleared;
+      // очки: за линию + за комбо
+      score += cleared * 100 + (cleared-1)*50;
+      linesEl.textContent = lines;
+      scoreEl.textContent = score;
+      msgEl.textContent = `Отлично! Убрано линий: ${cleared}`;
+    }
+  }
+
+  function anyMovePossible(pieces){
+    // проверяем, есть ли хоть одно место для хоть одной фигуры
+    for(const p of pieces){
+      for(let y=0;y<SIZE;y++){
+        for(let x=0;x<SIZE;x++){
+          if(canPlace(p.shape, x, y)) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function makePiece(){
+    const shape = rnd(SHAPES);
+    const color = rnd(COLORS);
+    return { id: crypto.randomUUID(), shape, color };
+  }
+
+  let currentPieces = [];
+
+  function renderPieces(){
+    piecesEl.innerHTML = '';
+    currentPieces.forEach((p) => {
+      const box = document.createElement('div');
+      box.className = 'piece';
+      box.draggable = true;
+      box.dataset.id = p.id;
+
+      const {w,h} = shapeBounds(p.shape);
+      const mini = document.createElement('div');
+      mini.className = 'mini';
+      mini.style.gridTemplateColumns = `repeat(${w}, 24px)`;
+
+      // сетка миниатюры
+      for(let y=0;y<h;y++){
+        for(let x=0;x<w;x++){
+          const m = document.createElement('div');
+          m.className = 'miniCell';
+          const filled = p.shape.some(([sx,sy]) => sx===x && sy===y);
+          if(filled) m.classList.add(p.color);
+          else {
+            m.style.opacity = '0.12';
+            m.style.border = '1px solid rgba(255,255,255,.10)';
+            m.style.background = 'transparent';
+          }
+          mini.appendChild(m);
+        }
+      }
+
+      box.appendChild(mini);
+
+      box.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', p.id);
+      });
+
+      piecesEl.appendChild(box);
+    });
+  }
+
+  function onDrop(e){
+    e.preventDefault();
+    const pieceId = e.dataTransfer.getData('text/plain');
+    const piece = currentPieces.find(p => p.id === pieceId);
+    if(!piece) return;
+
+    const x = Number(e.currentTarget.dataset.x);
+    const y = Number(e.currentTarget.dataset.y);
+
+    if(!canPlace(piece.shape, x, y)){
+      msgEl.textContent = 'Сюда не влезает. Попробуй другое место.';
+      return;
+    }
+
+    place(piece.shape, x, y, piece.color);
+
+    // очки за блоки
+    score += piece.shape.length * 10;
+    scoreEl.textContent = score;
+
+    // убрать использованную
+    currentPieces = currentPieces.filter(p => p.id !== pieceId);
+
+    clearLines();
+    renderBoard();
+
+    if(currentPieces.length === 0){
+      currentPieces = [makePiece(), makePiece(), makePiece()];
+      msgEl.textContent = 'Новые фигуры!';
+    }
+
+    renderPieces();
+
+    if(!anyMovePossible(currentPieces)){
+      msgEl.textContent = 'Ходов нет. Нажми "Новая игра".';
+    }
+  }
+
+  function reset(){
+    board = Array.from({length: SIZE}, () => Array(SIZE).fill(null));
+    score = 0;
+    lines = 0;
+    scoreEl.textContent = '0';
+    linesEl.textContent = '0';
+    msgEl.textContent = 'Готово. Перетащи любую фигуру на поле.';
+    currentPieces = [makePiece(), makePiece(), makePiece()];
+    renderBoard();
+    renderPieces();
+  }
+
+  newGameBtn.addEventListener('click', reset);
+
+  reset();
+})();
+</script>
+</body>
+</html>
