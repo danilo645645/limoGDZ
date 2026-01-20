@@ -332,16 +332,18 @@
   }
 
   function clearPreviewClasses(){
-    const els = gridEl.querySelectorAll('.cell.preview-ok,.cell.preview-bad,.cell.ghost');
-    els.forEach(el => {
-      el.classList.remove('preview-ok','preview-bad','ghost');
-      // если это был "призрак", мог быть временно filled
-      // перерисовка доски потом всё приведёт в порядок, но чистим аккуратно:
-      if(!el.dataset.lockedFilled){
-        // ничего
-      }
-    });
-  }
+  const els = gridEl.querySelectorAll('.cell.preview-ok,.cell.preview-bad,.cell.ghost,.cell.ghost-fill');
+  els.forEach(el => {
+    el.classList.remove('preview-ok','preview-bad','ghost','ghost-fill');
+    // ВАЖНО: убираем временный цвет, если клетка по board пустая
+    const x = Number(el.dataset.x);
+    const y = Number(el.dataset.y);
+    if (!board[y][x]) {
+      el.classList.remove('filled','orange','blue');
+    }
+  });
+}
+
 
   function applyPreview(piece, ox, oy){
     clearPreviewClasses();
