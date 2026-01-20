@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ru">
 <head>
@@ -9,14 +8,9 @@
     :root{
       --bg1:#0b5fa8;
       --bg2:#0aa2df;
-      --panel:#103d68;
-      --grid:#1b4e7a;
       --cell:#163f63;
       --cell2:#1c4b73;
-      --line:#2a6b9a;
       --white:#ffffff;
-      --orange:#ff8a1a;
-      --blue:#3b5bff;
     }
 
     *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
@@ -98,6 +92,7 @@
       border-radius:8px;
       position:relative;
       overflow:hidden;
+      transition:transform .08s ease;
     }
 
     .cell.filled{
@@ -142,8 +137,14 @@
       cursor:grab;
       user-select:none;
       min-height:90px;
+      transition:transform .08s ease, box-shadow .08s ease, outline-color .08s ease;
     }
     .piece:active{cursor:grabbing;}
+    .piece.selected{
+      outline: 2px solid rgba(255,255,255,.28);
+      box-shadow: 0 0 0 4px rgba(0,0,0,.12) inset;
+      transform: translateY(-1px);
+    }
 
     .mini{
       display:grid;
@@ -181,6 +182,34 @@
       min-height:44px;
     }
 
+    /* --- FX / HIGHLIGHTS --- */
+    .cell.preview-ok{
+      outline: 2px solid rgba(140,255,170,.75);
+      box-shadow: 0 0 0 2px rgba(140,255,170,.18) inset;
+    }
+    .cell.preview-bad{
+      outline: 2px solid rgba(255,140,140,.75);
+      box-shadow: 0 0 0 2px rgba(255,140,140,.18) inset;
+    }
+    .cell.ghost{
+      opacity:.65;
+      filter:saturate(1.1);
+    }
+    .cell.shatter{
+      animation: shatter .22s ease-out forwards;
+    }
+    @keyframes shatter{
+      0%{ transform:scale(1); opacity:1; filter:blur(0px); }
+      100%{ transform:scale(.75); opacity:0; filter:blur(1.5px); }
+    }
+    .cell.pop{
+      animation: pop .12s ease-out;
+    }
+    @keyframes pop{
+      0%{ transform:scale(.95); }
+      100%{ transform:scale(1); }
+    }
+
     @media (max-width: 900px){
       .wrap{grid-template-columns:1fr; }
       .side{min-height:auto;}
@@ -207,10 +236,10 @@
     <div class="side">
       <div style="font-weight:800;font-size:18px;">Фигуры</div>
       <div class="hint">
-        Перетащи фигуру на поле. Заполняй строки или столбцы - они исчезают и дают очки.
+        Выбери фигуру (клик) - наведи на поле - кликни, чтобы поставить. Можно и перетаскивать.
       </div>
       <div class="pieces" id="pieces"></div>
-      <div class="msg" id="msg">Готово. Перетащи любую фигуру на поле.</div>
+      <div class="msg" id="msg">Выбери фигуру и поставь её на поле.</div>
     </div>
   </div>
 
@@ -228,32 +257,122 @@
   let score = 0;
   let lines = 0;
 
-  // Несколько базовых фигур (можно расширить)
-  // Каждая фигура: массив координат [x,y] от (0,0)
+  // --- Sound (WebAudio, без файлов) ---
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioCtx();
+  function beep(type){
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    let f = 440, dur = .08, vol = .08;
+    if(type==="pick"){ f=660; dur=.05; vol=.06; }
+    if(type==="place"){ f=520; dur=.06; vol=.07; }
+    if(type==="bad"){ f=180; dur=.10; vol=.08; }
+    if(type==="clear"){ f=880; dur=.12; vol=.09; }
+    if(type==="over"){ f=120; dur=.22; vol=.09; }
+
+    osc.type = (type==="bad" || type==="over") ? "sawtooth" : "triangle";
+    osc.frequency.setValueAtTime(f, now);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(vol, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+    osc.start(now);
+    osc.stop(now + dur + 0.02);
+  }
+
+  window.addEventListener('pointerdown', () => {
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+  }, {once:true});
+
   const SHAPES = [
-    // линия 4
     [[0,0],[1,0],[2,0],[3,0]],
-    // квадрат 2x2
     [[0,0],[1,0],[0,1],[1,1]],
-    // прямоугольник 3x2
     [[0,0],[1,0],[2,0],[0,1],[1,1],[2,1]],
-    // L 3x3 (угол)
     [[0,0],[0,1],[0,2],[1,2],[2,2]],
-    // T
     [[0,0],[1,0],[2,0],[1,1]],
-    // одиночный
     [[0,0]],
-    // 3 в ряд
     [[0,0],[1,0],[2,0]],
-    // 5 в ряд
     [[0,0],[1,0],[2,0],[3,0],[4,0]],
-    // "ступенька"
     [[0,1],[1,1],[1,0],[2,0]],
   ];
-
   const COLORS = ['orange','blue'];
-
   function rnd(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function shapeBounds(shape){
+    let maxX = 0, maxY = 0;
+    for(const [x,y] of shape){ if(x>maxX) maxX=x; if(y>maxY) maxY=y; }
+    return {w:maxX+1, h:maxY+1};
+  }
+
+  let selectedPieceId = null;
+
+  function makePiece(){
+    return { id: crypto.randomUUID(), shape: rnd(SHAPES), color: rnd(COLORS) };
+  }
+  let currentPieces = [];
+
+  function canPlace(shape, ox, oy){
+    for(const [x,y] of shape){
+      const px = ox + x, py = oy + y;
+      if(px<0 || py<0 || px>=SIZE || py>=SIZE) return false;
+      if(board[py][px]) return false;
+    }
+    return true;
+  }
+  function place(shape, ox, oy, color){
+    for(const [x,y] of shape){
+      board[oy+y][ox+x] = color;
+    }
+  }
+  function getPieceById(id){
+    return currentPieces.find(p => p.id === id) || null;
+  }
+
+  function clearPreviewClasses(){
+    const els = gridEl.querySelectorAll('.cell.preview-ok,.cell.preview-bad,.cell.ghost');
+    els.forEach(el => {
+      el.classList.remove('preview-ok','preview-bad','ghost');
+      // если это был "призрак", мог быть временно filled
+      // перерисовка доски потом всё приведёт в порядок, но чистим аккуратно:
+      if(!el.dataset.lockedFilled){
+        // ничего
+      }
+    });
+  }
+
+  function applyPreview(piece, ox, oy){
+    clearPreviewClasses();
+    if(!piece) return false;
+
+    const ok = canPlace(piece.shape, ox, oy);
+    for(const [dx,dy] of piece.shape){
+      const x = ox+dx, y = oy+dy;
+      if(x<0 || y<0 || x>=SIZE || y>=SIZE) continue;
+      const el = gridEl.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+      if(!el) continue;
+
+      el.classList.add(ok ? 'preview-ok' : 'preview-bad');
+
+      if(ok && !board[y][x]){
+        el.classList.add('ghost','filled',piece.color);
+      }
+    }
+    return ok;
+  }
+
+  function anyMovePossible(pieces){
+    for(const p of pieces){
+      for(let y=0;y<SIZE;y++){
+        for(let x=0;x<SIZE;x++){
+          if(canPlace(p.shape, x, y)) return true;
+        }
+      }
+    }
+    return false;
+  }
 
   function renderBoard(){
     gridEl.innerHTML = '';
@@ -269,94 +388,40 @@
           cell.classList.add('filled', v);
         }
 
-        // drop target
+        cell.addEventListener('pointerenter', () => {
+          if(!selectedPieceId) return;
+          const piece = getPieceById(selectedPieceId);
+          if(!piece) return;
+          applyPreview(piece, x, y);
+        });
+
+        cell.addEventListener('click', () => {
+          if(!selectedPieceId) return;
+          const piece = getPieceById(selectedPieceId);
+          if(!piece) return;
+          tryPlace(piece, x, y);
+        });
+
         cell.addEventListener('dragover', (e) => e.preventDefault());
-        cell.addEventListener('drop', onDrop);
+        cell.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const pieceId = e.dataTransfer.getData('text/plain');
+          const piece = getPieceById(pieceId);
+          if(!piece) return;
+          selectedPieceId = piece.id;
+          tryPlace(piece, x, y);
+        });
 
         gridEl.appendChild(cell);
       }
     }
   }
 
-  function shapeBounds(shape){
-    let maxX = 0, maxY = 0;
-    for(const [x,y] of shape){ if(x>maxX) maxX=x; if(y>maxY) maxY=y; }
-    return {w:maxX+1, h:maxY+1};
-  }
-
-  function canPlace(shape, ox, oy){
-    for(const [x,y] of shape){
-      const px = ox + x, py = oy + y;
-      if(px<0 || py<0 || px>=SIZE || py>=SIZE) return false;
-      if(board[py][px]) return false;
-    }
-    return true;
-  }
-
-  function place(shape, ox, oy, color){
-    for(const [x,y] of shape){
-      board[oy+y][ox+x] = color;
-    }
-  }
-
-  function clearLines(){
-    let cleared = 0;
-
-    // rows
-    for(let y=0;y<SIZE;y++){
-      if(board[y].every(Boolean)){
-        board[y] = Array(SIZE).fill(null);
-        cleared++;
-      }
-    }
-
-    // cols
-    for(let x=0;x<SIZE;x++){
-      let full = true;
-      for(let y=0;y<SIZE;y++){
-        if(!board[y][x]){ full=false; break; }
-      }
-      if(full){
-        for(let y=0;y<SIZE;y++) board[y][x] = null;
-        cleared++;
-      }
-    }
-
-    if(cleared>0){
-      lines += cleared;
-      // очки: за линию + за комбо
-      score += cleared * 100 + (cleared-1)*50;
-      linesEl.textContent = lines;
-      scoreEl.textContent = score;
-      msgEl.textContent = `Отлично! Убрано линий: ${cleared}`;
-    }
-  }
-
-  function anyMovePossible(pieces){
-    // проверяем, есть ли хоть одно место для хоть одной фигуры
-    for(const p of pieces){
-      for(let y=0;y<SIZE;y++){
-        for(let x=0;x<SIZE;x++){
-          if(canPlace(p.shape, x, y)) return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  function makePiece(){
-    const shape = rnd(SHAPES);
-    const color = rnd(COLORS);
-    return { id: crypto.randomUUID(), shape, color };
-  }
-
-  let currentPieces = [];
-
   function renderPieces(){
     piecesEl.innerHTML = '';
     currentPieces.forEach((p) => {
       const box = document.createElement('div');
-      box.className = 'piece';
+      box.className = 'piece' + (p.id === selectedPieceId ? ' selected' : '');
       box.draggable = true;
       box.dataset.id = p.id;
 
@@ -365,12 +430,11 @@
       mini.className = 'mini';
       mini.style.gridTemplateColumns = `repeat(${w}, 24px)`;
 
-      // сетка миниатюры
-      for(let y=0;y<h;y++){
-        for(let x=0;x<w;x++){
+      for(let yy=0;yy<h;yy++){
+        for(let xx=0;xx<w;xx++){
           const m = document.createElement('div');
           m.className = 'miniCell';
-          const filled = p.shape.some(([sx,sy]) => sx===x && sy===y);
+          const filled = p.shape.some(([sx,sy]) => sx===xx && sy===yy);
           if(filled) m.classList.add(p.color);
           else {
             m.style.opacity = '0.12';
@@ -383,39 +447,114 @@
 
       box.appendChild(mini);
 
+      box.addEventListener('click', () => {
+        selectedPieceId = (selectedPieceId === p.id) ? null : p.id;
+        clearPreviewClasses();
+        renderPieces();
+        if(selectedPieceId) {
+          beep("pick");
+          msgEl.textContent = 'Выбрана фигура. Наведи на поле и кликни, чтобы поставить.';
+        } else {
+          msgEl.textContent = 'Выбор снят.';
+        }
+      });
+
       box.addEventListener('dragstart', (e) => {
+        selectedPieceId = p.id;
         e.dataTransfer.setData('text/plain', p.id);
+        beep("pick");
+        renderPieces();
       });
 
       piecesEl.appendChild(box);
     });
   }
 
-  function onDrop(e){
-    e.preventDefault();
-    const pieceId = e.dataTransfer.getData('text/plain');
-    const piece = currentPieces.find(p => p.id === pieceId);
-    if(!piece) return;
+  function popPlacedCells(shape, ox, oy){
+    for(const [dx,dy] of shape){
+      const x = ox+dx, y = oy+dy;
+      const el = gridEl.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+      if(el){
+        el.classList.add('pop');
+        setTimeout(() => el.classList.remove('pop'), 140);
+      }
+    }
+  }
 
-    const x = Number(e.currentTarget.dataset.x);
-    const y = Number(e.currentTarget.dataset.y);
+  function clearLinesAnimated(){
+    const fullRows = [];
+    const fullCols = [];
+
+    for(let y=0;y<SIZE;y++){
+      if(board[y].every(Boolean)) fullRows.push(y);
+    }
+    for(let x=0;x<SIZE;x++){
+      let full = true;
+      for(let y=0;y<SIZE;y++){
+        if(!board[y][x]){ full=false; break; }
+      }
+      if(full) fullCols.push(x);
+    }
+
+    const cleared = fullRows.length + fullCols.length;
+    if(cleared === 0) return 0;
+
+    const toClear = new Set();
+    for(const y of fullRows) for(let x=0;x<SIZE;x++) toClear.add(`${x},${y}`);
+    for(const x of fullCols) for(let y=0;y<SIZE;y++) toClear.add(`${x},${y}`);
+
+    for(const key of toClear){
+      const [x,y] = key.split(',').map(Number);
+      const el = gridEl.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+      if(el) el.classList.add('shatter');
+    }
+
+    setTimeout(() => {
+      for(const y of fullRows){
+        board[y] = Array(SIZE).fill(null);
+      }
+      for(const x of fullCols){
+        for(let y=0;y<SIZE;y++) board[y][x] = null;
+      }
+
+      lines += cleared;
+      score += cleared * 100 + (cleared-1)*50;
+      linesEl.textContent = lines;
+      scoreEl.textContent = score;
+      msgEl.textContent = `Линии убраны: ${cleared}`;
+      beep("clear");
+
+      renderBoard();
+      renderPieces();
+      clearPreviewClasses();
+    }, 230);
+
+    return cleared;
+  }
+
+  function tryPlace(piece, x, y){
+    clearPreviewClasses();
 
     if(!canPlace(piece.shape, x, y)){
-      msgEl.textContent = 'Сюда не влезает. Попробуй другое место.';
+      msgEl.textContent = 'Сюда не влезает. Наведи на другое место.';
+      beep("bad");
+      applyPreview(piece, x, y);
       return;
     }
 
     place(piece.shape, x, y, piece.color);
 
-    // очки за блоки
     score += piece.shape.length * 10;
     scoreEl.textContent = score;
+    beep("place");
 
-    // убрать использованную
-    currentPieces = currentPieces.filter(p => p.id !== pieceId);
+    currentPieces = currentPieces.filter(p => p.id !== piece.id);
+    selectedPieceId = null;
 
-    clearLines();
     renderBoard();
+    popPlacedCells(piece.shape, x, y);
+
+    clearLinesAnimated();
 
     if(currentPieces.length === 0){
       currentPieces = [makePiece(), makePiece(), makePiece()];
@@ -426,6 +565,7 @@
 
     if(!anyMovePossible(currentPieces)){
       msgEl.textContent = 'Ходов нет. Нажми "Новая игра".';
+      beep("over");
     }
   }
 
@@ -433,13 +573,19 @@
     board = Array.from({length: SIZE}, () => Array(SIZE).fill(null));
     score = 0;
     lines = 0;
+    selectedPieceId = null;
     scoreEl.textContent = '0';
     linesEl.textContent = '0';
-    msgEl.textContent = 'Готово. Перетащи любую фигуру на поле.';
+    msgEl.textContent = 'Выбери фигуру и поставь её на поле.';
     currentPieces = [makePiece(), makePiece(), makePiece()];
     renderBoard();
     renderPieces();
+    clearPreviewClasses();
   }
+
+  gridEl.addEventListener('pointerleave', () => {
+    clearPreviewClasses();
+  });
 
   newGameBtn.addEventListener('click', reset);
 
