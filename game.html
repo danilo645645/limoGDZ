@@ -643,9 +643,10 @@ function smartDealPieces(){
     clearLinesAnimated();
 
     if(currentPieces.length === 0){
-      currentPieces = [makePiece(), makePiece(), makePiece()];
-      msgEl.textContent = 'Новые фигуры!';
-    }
+    currentPieces = smartDealPieces();
+    msgEl.textContent = 'Новые фигуры!';
+  }
+
 
     renderPieces();
 
@@ -663,7 +664,7 @@ function smartDealPieces(){
     scoreEl.textContent = '0';
     linesEl.textContent = '0';
     msgEl.textContent = 'Выбери фигуру и поставь её на поле.';
-    currentPieces = [makePiece(), makePiece(), makePiece()];
+    currentPieces = smartDealPieces();
     renderBoard();
     renderPieces();
     clearPreviewClasses();
