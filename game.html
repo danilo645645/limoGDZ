@@ -313,6 +313,90 @@
     return { id: crypto.randomUUID(), shape: rnd(SHAPES), color: rnd(COLORS) };
   }
   let currentPieces = [];
+  function cloneBoard(b){
+  return b.map(row => row.slice());
+}
+
+function placeOnBoard(b, shape, ox, oy, color){
+  for(const [x,y] of shape){
+    b[oy+y][ox+x] = color;
+  }
+}
+
+function countFullLines(b){
+  let fullRows = 0, fullCols = 0;
+
+  for(let y=0;y<SIZE;y++){
+    if(b[y].every(Boolean)) fullRows++;
+  }
+  for(let x=0;x<SIZE;x++){
+    let ok = true;
+    for(let y=0;y<SIZE;y++){
+      if(!b[y][x]){ ok=false; break; }
+    }
+    if(ok) fullCols++;
+  }
+  return fullRows + fullCols;
+}
+
+function bestPlacementScoreForPiece(piece, baseBoard){
+  let placements = 0;
+  let bestClear = 0;
+
+  for(let oy=0; oy<SIZE; oy++){
+    for(let ox=0; ox<SIZE; ox++){
+      if(!canPlace(piece.shape, ox, oy)) continue;
+      placements++;
+
+      const b2 = cloneBoard(baseBoard);
+      placeOnBoard(b2, piece.shape, ox, oy, piece.color);
+
+      const clears = countFullLines(b2);
+      if(clears > bestClear) bestClear = clears;
+    }
+  }
+
+  if(placements === 0) return -999999;
+  return bestClear * 1000 + placements * 5 + piece.shape.length * 2;
+}
+
+function makePieceSmart(){
+  return { id: crypto.randomUUID(), shape: rnd(SHAPES), color: rnd(COLORS) };
+}
+
+function smartDealPieces(){
+  const POOL = 60;
+
+  const pool = [];
+  for(let i=0;i<POOL;i++){
+    const p = makePieceSmart();
+    const score = bestPlacementScoreForPiece(p, board);
+    pool.push({p, score});
+  }
+
+  const ok = pool.filter(x => x.score > -999000);
+
+  if(ok.length === 0){
+    // если совсем нет вариантов — вернем обычный рандом
+    return [makePiece(), makePiece(), makePiece()];
+  }
+
+  ok.sort((a,b)=> b.score - a.score);
+
+  const TOP = Math.min(10, ok.length);
+  function pickFromTop(){
+    return ok[Math.floor(Math.random()*TOP)].p;
+  }
+
+  const picked = [];
+  while(picked.length < 3){
+    const cand = pickFromTop();
+    if(picked.some(x => x.shape === cand.shape)) continue;
+    picked.push(cand);
+  }
+
+  return picked;
+}
 
   function canPlace(shape, ox, oy){
     for(const [x,y] of shape){
