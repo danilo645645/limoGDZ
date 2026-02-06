@@ -1,68 +1,25 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<link rel="icon" href="/icon_site.png" type="image/x-icon">
+<link rel="icon" href="./icon_site.png" type="image/png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>История — 6Д авто-ДЗ</title>
-<style>
-.ico{width:18px;height:18px;vertical-align:-3px;margin-right:8px;fill:currentColor}
+<link rel="stylesheet" href="styles.css">
 
-:root{
-  --bg-color:#000000;
-  --accent-color:#ffcc66;
-  --ui-color:#ffdd99;
-}
-
-*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-body{
- margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
- background:radial-gradient(circle at top, var(--accent-color), transparent 60%), var(--bg-color);
- color:var(--ui-color);
-}
-.card{
- width:100%;max-width:620px;
- background:rgba(255,255,255,.12);
- backdrop-filter:blur(18px);
- border-radius:22px;
- padding:26px;
- box-shadow:0 0 12px color-mix(in srgb, var(--ui-color) 60%, transparent);
- border:1px solid var(--ui-color);
-}
-h1{margin-bottom:12px}
-p{font-size:15px;opacity:.9}
-a{color:var(--ui-color);text-decoration:none}
-a.back{display:inline-block;margin-top:18px}
-.buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
-.btn{display:block;padding:14px;text-align:center;border-radius:14px;background:rgba(255,255,255,.18)}
-@media(max-width:600px){
- body{padding:14px}
- .card{padding:22px}
- .buttons{grid-template-columns:1fr}
-}
-</style>
 </head>
- <!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106274390', 'ym');
-
-    ym(106274390, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/106274390" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
+ 
 <body>
 <div class="card">
 <h1><svg viewBox="0 0 24 24" class="ico"><path d="M12 8a1 1 0 0 0-1 1v4.2l3 1.8 1-1.6-2-1.2V9z"/></svg>История</h1>
-
+<div class="toolbar">
+  <button class="btn" data-action="copy-solution" type="button">Скопировать</button>
+  <button class="btn" data-action="toggle-explain" type="button" aria-expanded="false">Решение с объяснением</button>
+</div>
+<div id="solution">
 <h2>История. §19-20. Культура и быт Руси в IX - начале XIII вв.</h2>
 
 <p><b>Сообщения по всем подтемам параграфа</b></p>
-
 
 <h3>2. Грамотность и учение книжное</h3>
 <p>
@@ -74,7 +31,6 @@ a.back{display:inline-block;margin-top:18px}
 которые показывают, что грамотными были не только священники и князья, но и простые люди.
 </p>
 
-
 <h3>3. Древнерусская литература XI - начала XIII вв.</h3>
 <p>
 В это время появились первые произведения русских авторов. 
@@ -83,7 +39,6 @@ a.back{display:inline-block;margin-top:18px}
 Главным памятником литературы считается «Слово о полку Игореве», 
 которое рассказывает о походе князя Игоря против половцев и призывает к единству русских земель.
 </p>
-
 
 <h3>4. Былины и летописание</h3>
 <p>
@@ -94,7 +49,6 @@ a.back{display:inline-block;margin-top:18px}
 Летописи помогают узнать историю Древней Руси.
 </p>
 
-
 <h3>5. Зодчество (архитектура)</h3>
 <p>
 После принятия христианства на Руси начали строить каменные храмы по византийскому образцу. 
@@ -103,7 +57,6 @@ a.back{display:inline-block;margin-top:18px}
 а также Софийский собор в Новгороде. 
 Храмы украшались мозаиками, фресками и иконами и были центрами духовной жизни.
 </p>
-
 
 <h3>7. Архитектура русских земель в XII - начале XIII вв.</h3>
 <p>
@@ -114,7 +67,6 @@ a.back{display:inline-block;margin-top:18px}
 Эти здания отличались резьбой по камню и красивыми украшениями фасадов.
 </p>
 
-
 <h3>8. Художественное ремесло</h3>
 <p>
 Русские мастера славились ювелирным искусством. 
@@ -122,7 +74,6 @@ a.back{display:inline-block;margin-top:18px}
 Из золота и серебра делали украшения, бармы, кресты, оружие и предметы быта. 
 Изделия отличались тонкой работой и высоким качеством, поэтому ценились даже за пределами Руси.
 </p>
-
 
 <h3>9. Повседневная жизнь населения</h3>
 <p>
@@ -134,7 +85,6 @@ a.back{display:inline-block;margin-top:18px}
 Основными занятиями были земледелие, ремёсла и торговля.
 </p>
 
-
 <hr style="margin: 30px 0;">
 
 <p style="font-weight: bold;">
@@ -145,70 +95,25 @@ a.back{display:inline-block;margin-top:18px}
 <p style="font-weight: bold;">
 Чтобы получить индивидуальное задание или помощь - напиши мне в Telegram.
 </p>
-
+</div>
+<div class="explain-panel" id="explainPanel" aria-hidden="true"></div>
 <a class="back" href="index.html">← Назад</a>
-
 </div>
 
-<div id="colorWheel" style="
- position:fixed;
- bottom:20px;
- right:20px;
- background:rgba(0,0,0,.45);
- padding:10px;
- border-radius:18px;
- backdrop-filter:blur(10px);
- display:flex;
- gap:8px;
- z-index:9999;
-">
-
-<label title="Подсветка фона">
- <input id="accentPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
-<label title="Фон">
- <input id="bgPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
-<label title="Интерфейс (текст, обводка, glow)">
- <input id="uiPicker" type="color"
-  style="width:42px;height:42px;border-radius:50%;border:none;cursor:pointer;">
-</label>
-
+<div id="colorWheel">
+  <label title="Подсветка фона">
+    <input id="accentPicker" type="color">
+  </label>
+  <label title="Фон">
+    <input id="bgPicker" type="color">
+  </label>
+  <label title="Интерфейс (текст, обводка, glow)">
+    <input id="uiPicker" type="color">
+  </label>
 </div>
 
-<script>
-const root=document.documentElement;
-const acc=document.getElementById('accentPicker');
-const bg=document.getElementById('bgPicker');
-const ui=document.getElementById('uiPicker');
-
-// load saved
-acc.value=localStorage.getItem('accent')||'#ffcc66';
-bg.value=localStorage.getItem('bg')||'#000000';
-ui.value=localStorage.getItem('ui')||'#ffdd99';
-
-root.style.setProperty('--accent-color', acc.value);
-root.style.setProperty('--bg-color', bg.value);
-root.style.setProperty('--ui-color', ui.value);
-
-// live update
-acc.oninput=()=>{
- root.style.setProperty('--accent-color', acc.value);
- localStorage.setItem('accent', acc.value);
-};
-bg.oninput=()=>{
- root.style.setProperty('--bg-color', bg.value);
- localStorage.setItem('bg', bg.value);
-};
-ui.oninput=()=>{
- root.style.setProperty('--ui-color', ui.value);
- localStorage.setItem('ui', ui.value);
-};
-</script>
+<script defer src="theme.js"></script>
+<script defer src="main.js"></script>
 </body>
 
 </html>
