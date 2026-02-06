@@ -85,22 +85,6 @@ a{color:inherit;text-decoration:none}
 }
 .btn.squish{animation:btnPop .22s ease}
 
-.explain-panel{
-  overflow:hidden;
-  max-height:0;
-  opacity:0;
-  transform:translateY(-6px);
-  transition:max-height .35s ease, opacity .25s ease, transform .35s ease;
-  border-top:1px solid rgba(255,255,255,.14);
-  margin-top:12px;
-  padding-top:0;
-}
-.explain-panel.open{
-  max-height:4000px;
-  opacity:1;
-  transform:translateY(0);
-  padding-top:12px;
-}
 
 #colorWheel{
   position:fixed;
@@ -138,7 +122,11 @@ th,td{padding:6px;border:1px solid var(--ui-color)}
 }
 .btn.full{grid-column:1/-1}
 @media(max-width:600px){
-  body{padding:14px}
+  body{padding:14px;align-items:flex-start;justify-content:flex-start}
+  .card{padding:20px;border-radius:18px;max-width:720px}
+  .buttons{grid-template-columns:1fr}
+  #colorWheel{right:12px;bottom:12px;transform:scale(.92);transform-origin:bottom right}
+}
   .card{padding:22px}
   .buttons{grid-template-columns:1fr}
 }
