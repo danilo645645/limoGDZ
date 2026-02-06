@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<link rel="icon" href="./icon_site.png" type="image/png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Новости дня - 6Д авто-ДЗ</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="card">
+    <h1>📰 Новости дня</h1>
+    <p style="opacity:.9">Здесь можно быстро писать обновления: что задали, что отменили, какие контрольные и т.д.</p>
+
+    <h2>06.02.2026</h2>
+    <ul style="line-height:1.6;margin:10px 0 0;padding-left:18px">
+      <li><b>Пример:</b> по математике завтра принести тетрадь в клетку.</li>
+      <li><b>Пример:</b> по русскому — выучить правило (стр. 42).</li>
+    </ul>
+
+    <p style="font-size:13px;opacity:.75;margin-top:14px">
+      Чтобы добавить новость — просто допиши новый блок <code>&lt;h2&gt;дата&lt;/h2&gt;</code> и список <code>&lt;ul&gt;</code>.
+    </p>
+
+    <a class="back" href="index.html">← На главную</a>
+  </div>
+
+  <div id="colorWheel">
+    <label title="Подсветка фона">
+      <input id="accentPicker" type="color">
+    </label>
+    <label title="Фон">
+      <input id="bgPicker" type="color">
+    </label>
+    <label title="Интерфейс">
+      <input id="uiPicker" type="color">
+    </label>
+  </div>
+
+  <script defer src="theme.js"></script>
+</body>
+</html>
