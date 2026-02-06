@@ -5,7 +5,11 @@
   --accent-color:#ffcc66;
   --ui-color:#ffdd99;
 }
-
+.task, .problem, .solution{
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
 *{
   box-sizing:border-box;
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
