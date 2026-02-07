@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <link rel="icon" href="./icon_site.png" type="image/png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pipiska</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* Небольшие стили под соцчасть, при этом общий стиль берётся из styles.css */
+    .topbar { display:flex; gap:10px; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+    .topbar h1 { margin: 8px 0; font-size: 22px; }
+    .meBox { display:flex; gap:10px; align-items:center; }
+    .meAva {
+      width: 40px; height: 40px; border-radius: 12px;
+      display:grid; place-items:center;
+      background: color-mix(in srgb, var(--bg-color) 70%, transparent);
+      border: 1px solid color-mix(in srgb, var(--ui-color) 25%, transparent);
+      overflow:hidden;
+    }
+    .meAva img { width:100%; height:100%; object-fit:cover; display:block; }
+    .muted { opacity:.75; font-size: 13px; }
+
+    .composer textarea, .composer input {
+      width: 100%;
+      background: color-mix(in srgb, var(--bg-color) 75%, transparent);
+      color: var(--ui-color);
+      border: 1px solid color-mix(in srgb, var(--ui-color) 25%, transparent);
+      border-radius: 14px;
+      padding: 12px;
+      outline: none;
+    }
+    .composer textarea { min-height: 90px; resize: vertical; }
+
+    .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    @media (max-width: 740px){ .grid2 { grid-template-columns: 1fr; } }
+
+    .post {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid color-mix(in srgb, var(--ui-color) 22%, transparent);
+      background: color-mix(in srgb, var(--bg-color) 72%, transparent);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--accent-color) 10%, transparent);
+    }
+    .postHead { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+    .postLeft { display:flex; gap:10px; align-items:center; }
+    .ava {
+      width: 34px; height: 34px; border-radius: 12px;
+      display:grid; place-items:center;
+      background: color-mix(in srgb, var(--bg-color) 70%, transparent);
+      border: 1px solid color-mix(in srgb, var(--ui-color) 22%, transparent);
+      overflow:hidden;
+    }
+    .ava img { width:100%; height:100%; object-fit:cover; display:block; }
+    .mediaBox {
+      margin-top: 10px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid color-mix(in srgb, var(--ui-color) 18%, transparent);
+    }
+    .mediaBox img, .mediaBox video { width:100%; display:block; }
+
+    .actions { display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap; }
+    .abtn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, var(--ui-color) 22%, transparent);
+      background: transparent;
+      color: var(--ui-color);
+      cursor: pointer;
+      transition: transform .08s ease, box-shadow .15s ease;
+    }
+    .abtn:active { transform: scale(.98); }
+    .abtn.on {
+      box-shadow: 0 0 20px color-mix(in srgb, var(--accent-color) 18%, transparent);
+      border-color: color-mix(in srgb, var(--accent-color) 35%, transparent);
+    }
+
+    .comments {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed color-mix(in srgb, var(--ui-color) 18%, transparent);
+      display:none;
+    }
+    .comments.on { display:block; }
+    .citem { padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--ui-color) 10%, transparent); }
+    .citem:last-child { border-bottom: 0; }
+    .cform { display:flex; gap:10px; margin-top: 10px; }
+    .cform input { flex: 1; }
+
+    /* модалка профиля */
+    .modalBack {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items: center; justify-content: center;
+      padding: 18px;
+      z-index: 20;
+    }
+    .modalBack.on { display:flex; }
+    .modal {
+      width: min(720px, 100%);
+      border-radius: 22px;
+      padding: 16px;
+      border: 1px solid color-mix(in srgb, var(--ui-color) 25%, transparent);
+      background: color-mix(in srgb, var(--bg-color) 85%, transparent);
+      box-shadow: 0 0 30px color-mix(in srgb, var(--accent-color) 18%, transparent);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card home" style="max-width: 960px;">
+    <div class="topbar">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <a class="btn" href="index.html">← На главную</a>
+        <h1>Pipiska</h1>
+      </div>
+
+      <div class="meBox">
+        <div class="meAva" id="meAva">🙂</div>
+        <div>
+          <div id="meName" style="font-weight:700;">...</div>
+          <div class="muted" id="meAbout">профиль…</div>
+        </div>
+        <button class="btn" id="profileBtn">Профиль</button>
+        <button class="btn" id="logoutBtn">Выйти</button>
+      </div>
+    </div>
+
+    <div class="composer">
+      <h2 style="margin:0 0 10px 0;">Новый пост</h2>
+
+      <textarea id="postText" placeholder="Напиши пост…"></textarea>
+
+      <div class="grid2" style="margin-top:10px;">
+        <input id="postMedia" type="file" accept="image/*,video/*" />
+        <button class="btn full" id="postBtn">Опубликовать</button>
+      </div>
+
+      <p class="muted" id="status" style="margin-top:8px;"></p>
+      <p class="muted" style="margin-top:6px;">Можно фото/видео до 300 МБ.</p>
+    </div>
+
+    <div style="margin-top: 12px;">
+      <h2 style="margin: 0 0 8px 0;">Лента</h2>
+      <div id="feed"></div>
+      <p class="muted" id="feedHint">Если пусто — опубликуй первый пост 🙂</p>
+    </div>
+  </div>
+
+  <!-- Колесо цветов как на сайте -->
+  <div id="colorWheel">
+    <label title="Подсветка фона">
+      <input id="accentPicker" type="color">
+    </label>
+    <label title="Фон">
+      <input id="bgPicker" type="color">
+    </label>
+    <label title="Интерфейс (текст, обводка, glow)">
+      <input id="uiPicker" type="color">
+    </label>
+  </div>
+
+  <!-- Модалка профиля -->
+  <div class="modalBack" id="modalBack">
+    <div class="modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+        <h2 style="margin:0;">Профиль</h2>
+        <button class="btn" id="closeModal">Закрыть</button>
+      </div>
+
+      <div class="grid2" style="margin-top:10px;">
+        <div>
+          <div class="muted">Ник</div>
+          <input id="nickInput" placeholder="Например: bog-nastya" style="margin-top:6px;" />
+        </div>
+        <div>
+          <div class="muted">О себе</div>
+          <input id="aboutInput" placeholder="Например: люблю аниме 😎" style="margin-top:6px;" />
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <div class="muted">Фото профиля (не обязательно)</div>
+        <input id="avatarFile" type="file" accept="image/*" style="margin-top:6px;" />
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;">
+        <button class="btn" id="saveProfile">Сохранить</button>
+      </div>
+
+      <p class="muted" id="profileStatus" style="margin-top:8px;"></p>
+    </div>
+  </div>
+
+  <!-- тема -->
+  <script defer src="theme.js"></script>
+
+  <!-- auth + guard -->
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="guard-pipiska.js"></script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+    import {
+      getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc,
+      serverTimestamp, query, orderBy, limit, onSnapshot, runTransaction
+    } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    const firebaseConfig = window.__firebaseConfig;
+    if (!firebaseConfig) {
+      alert("В auth.js не найден window.__firebaseConfig (добавь строку window.__firebaseConfig = firebaseConfig;).");
+      throw new Error("missing __firebaseConfig");
+    }
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const MAX_BYTES = 300 * 1024 * 1024;
+
+    // Cloudinary (unsigned uploads)
+    const CLOUDINARY_CLOUD_NAME = "dfcto3ehn";
+    const CLOUDINARY_PRESET_POSTS = "posts_unsigned";
+    const CLOUDINARY_PRESET_AVATARS = "avatars_unsigned";
+
+    const $ = (id) => document.getElementById(id);
+
+    const meAva = $("meAva");
+    const meName = $("meName");
+    const meAbout = $("meAbout");
+    const status = $("status");
+    const feed = $("feed");
+    const feedHint = $("feedHint");
+
+    const modalBack = $("modalBack");
+    const profileBtn = $("profileBtn");
+    const closeModal = $("closeModal");
+    const saveProfile = $("saveProfile");
+    const profileStatus = $("profileStatus");
+    const nickInput = $("nickInput");
+    const aboutInput = $("aboutInput");
+    const avatarFile = $("avatarFile");
+
+    const logoutBtn = $("logoutBtn");
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      location.href = "login.html?next=pipiska.html";
+    });
+
+    function openModal(){ modalBack.classList.add("on"); }
+    function closeModalFn(){ modalBack.classList.remove("on"); profileStatus.textContent = ""; }
+    profileBtn.addEventListener("click", openModal);
+    closeModal.addEventListener("click", closeModalFn);
+    modalBack.addEventListener("click", (e) => { if (e.target === modalBack) closeModalFn(); });
+
+    const usersCol = collection(db, "users");
+    const postsCol = collection(db, "posts");
+
+    let currentUser = null;
+    let myProfile = { nick: "", about: "", avatarUrl: "" };
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+    function escapeAttr(s) { return escapeHtml(s).replaceAll("`", "&#096;"); }
+
+    async function uploadMediaFile({ file, path, onProgress }) {
+      // path используется только чтобы сложить в папку в Cloudinary
+      if (!file) return null;
+      if (file.size > MAX_BYTES) throw new Error("FILE_TOO_BIG");
+      if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) throw new Error("BAD_TYPE");
+
+      const isVideo = file.type.startsWith("video/");
+      const uploadPreset = isVideo || path?.startsWith("post_media/")
+        ? CLOUDINARY_PRESET_POSTS
+        : CLOUDINARY_PRESET_AVATARS;
+
+      // folder: первая часть до первого "/" (post_media / avatars)
+      const folder = (path || "").split("/").slice(0, 2).join("/"); // например post_media/<id> или avatars/<uid>
+
+      const endpoint = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+
+      const form = new FormData();
+      form.append("file", file);
+      form.append("upload_preset", uploadPreset);
+      if (folder) form.append("folder", folder);
+
+      return await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", endpoint);
+        xhr.upload.onprogress = (e) => {
+          if (!e.lengthComputable) return;
+          const pct = Math.round((e.loaded / e.total) * 100);
+          onProgress?.(pct);
+        };
+        xhr.onerror = () => reject(new Error("CLOUDINARY_UPLOAD_FAILED"));
+        xhr.onload = () => {
+          try {
+            const res = JSON.parse(xhr.responseText || "{}");
+            if (xhr.status >= 200 && xhr.status < 300 && res.secure_url) {
+              resolve(res.secure_url);
+            } else {
+              reject(new Error(res?.error?.message || "CLOUDINARY_UPLOAD_FAILED"));
+            }
+          } catch {
+            reject(new Error("CLOUDINARY_UPLOAD_FAILED"));
+          }
+        };
+        xhr.send(form);
+      });
+    }
+
+    async function loadOrCreateProfile(uid, fallbackNick) {
+      const ref = doc(usersCol, uid);
+      const snap = await getDoc(ref);
+
+      if (!snap.exists()) {
+        const init = { nick: fallbackNick || "user", about: "привет 👋", avatarUrl: "", updatedAt: serverTimestamp() };
+        await setDoc(ref, init);
+        return init;
+      }
+      return snap.data();
+    }
+
+    function applyProfileUI(p) {
+      meName.textContent = p.nick || "user";
+      meAbout.textContent = p.about || "";
+      nickInput.value = p.nick || "";
+      aboutInput.value = p.about || "";
+
+      if (p.avatarUrl) {
+        meAva.innerHTML = `<img alt="avatar" src="${escapeAttr(p.avatarUrl)}">`;
+      } else {
+        meAva.textContent = "🙂";
+      }
+
+      myProfile = { ...myProfile, ...p };
+    }
+
+    saveProfile.addEventListener("click", async () => {
+      if (!currentUser) return;
+
+      const nick = (nickInput.value || "").trim().slice(0, 24);
+      const about = (aboutInput.value || "").trim().slice(0, 60);
+
+      if (!nick) { profileStatus.textContent = "Ник не должен быть пустым."; return; }
+
+      try {
+        let avatarUrl = myProfile.avatarUrl || "";
+        const file = avatarFile?.files?.[0] || null;
+
+        if (file) {
+          profileStatus.textContent = "Загружаю фото профиля… 0%";
+          avatarUrl = await uploadMediaFile({
+            file,
+            path: `avatars/${currentUser.uid}/${Date.now()}_${file.name}`,
+            onProgress: (pct) => (profileStatus.textContent = `Загружаю фото профиля… ${pct}%`)
+          });
+        }
+
+        await setDoc(doc(usersCol, currentUser.uid), {
+          nick, about, avatarUrl,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+
+        applyProfileUI({ nick, about, avatarUrl });
+        profileStatus.textContent = "Сохранено ✅";
+        setTimeout(() => (profileStatus.textContent = ""), 1200);
+      } catch (e) {
+        profileStatus.textContent = String(e?.message).includes("FILE_TOO_BIG")
+          ? "Фото больше 300 МБ — не пущу."
+          : "Ошибка сохранения профиля.";
+      }
+    });
+
+    function timeText(ts) {
+      try {
+        const d = ts?.toDate?.();
+        if (!d) return "";
+        return d.toLocaleString("ru-RU", { day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit" });
+      } catch { return ""; }
+    }
+
+    async function setReaction(postId, value) {
+      const uid = currentUser.uid;
+      const postRef = doc(postsCol, postId);
+      const reactRef = doc(collection(postRef, "reactions"), uid);
+
+      await runTransaction(db, async (tx) => {
+        const postSnap = await tx.get(postRef);
+        if (!postSnap.exists()) return;
+
+        const post = postSnap.data();
+        const reactSnap = await tx.get(reactRef);
+        const prev = reactSnap.exists() ? (reactSnap.data().v || 0) : 0;
+
+        let likeCount = post.likeCount || 0;
+        let dislikeCount = post.dislikeCount || 0;
+
+        if (prev === 1) likeCount--;
+        if (prev === -1) dislikeCount--;
+
+        if (value === 1) likeCount++;
+        if (value === -1) dislikeCount++;
+
+        tx.update(postRef, { likeCount, dislikeCount });
+
+        if (value === 0) {
+          if (reactSnap.exists()) tx.delete(reactRef);
+        } else {
+          tx.set(reactRef, { v: value, updatedAt: serverTimestamp() }, { merge: true });
+        }
+      });
+    }
+
+    async function addComment(postId, text) {
+      const postRef = doc(postsCol, postId);
+      const commentsCol = collection(postRef, "comments");
+
+      await runTransaction(db, async (tx) => {
+        const postSnap = await tx.get(postRef);
+        if (!postSnap.exists()) return;
+
+        tx.update(postRef, { commentCount: (postSnap.data().commentCount || 0) + 1 });
+
+        const cref = doc(commentsCol);
+        tx.set(cref, {
+          userId: currentUser.uid,
+          nick: myProfile.nick || "user",
+          avatarUrl: myProfile.avatarUrl || "",
+          text: text.slice(0, 400),
+          createdAt: serverTimestamp()
+        });
+      });
+    }
+
+    function renderPost(id, p) {
+      const el = document.createElement("div");
+      el.className = "post";
+
+      const authorAva = p.authorAvatarUrl
+        ? `<img alt="ava" src="${escapeAttr(p.authorAvatarUrl)}">`
+        : "";
+
+      el.innerHTML = `
+        <div class="postHead">
+          <div class="postLeft">
+            <div class="ava">${authorAva || "🙂"}</div>
+            <div>
+              <div style="font-weight:700;">${escapeHtml(p.authorNick || "user")}</div>
+              <div class="muted">${timeText(p.createdAt)}</div>
+            </div>
+          </div>
+          <div class="muted">❤️ ${p.likeCount||0} · 👎 ${p.dislikeCount||0} · 💬 ${p.commentCount||0}</div>
+        </div>
+
+        ${p.text ? `<div style="margin-top:10px;white-space:pre-wrap;">${escapeHtml(p.text)}</div>` : ""}
+
+        ${p.mediaUrl ? `
+          <div class="mediaBox">
+            ${p.mediaType === "video"
+              ? `<video controls preload="metadata" src="${escapeAttr(p.mediaUrl)}"></video>`
+              : `<img alt="media" loading="lazy" src="${escapeAttr(p.mediaUrl)}" onerror="this.style.display='none'">`
+            }
+          </div>` : ""}
+
+        <div class="actions">
+          <button class="abtn" data-like>❤️ Лайк</button>
+          <button class="abtn" data-dislike>👎 Дизлайк</button>
+          <button class="abtn" data-comments>💬 Комменты</button>
+        </div>
+
+        <div class="comments" data-cwrap>
+          <div data-clist></div>
+          <div class="cform">
+            <input data-cinp placeholder="Написать комментарий…" />
+            <button class="abtn" data-csend>Отправить</button>
+          </div>
+        </div>
+      `;
+
+      const cwrap = el.querySelector("[data-cwrap]");
+      const btnComments = el.querySelector("[data-comments]");
+      const clist = el.querySelector("[data-clist]");
+      const cinp = el.querySelector("[data-cinp]");
+      const csend = el.querySelector("[data-csend]");
+
+      btnComments.addEventListener("click", () => cwrap.classList.toggle("on"));
+
+      const likeBtn = el.querySelector("[data-like]");
+      const dislikeBtn = el.querySelector("[data-dislike]");
+
+      const reactRef = doc(collection(doc(postsCol, id), "reactions"), currentUser.uid);
+      onSnapshot(reactRef, (snap) => {
+        const v = snap.exists() ? (snap.data().v || 0) : 0;
+        likeBtn.classList.toggle("on", v === 1);
+        dislikeBtn.classList.toggle("on", v === -1);
+      });
+
+      likeBtn.addEventListener("click", async () => {
+        const isOn = likeBtn.classList.contains("on");
+        await setReaction(id, isOn ? 0 : 1);
+      });
+      dislikeBtn.addEventListener("click", async () => {
+        const isOn = dislikeBtn.classList.contains("on");
+        await setReaction(id, isOn ? 0 : -1);
+      });
+
+      const commentsQ = query(collection(doc(postsCol, id), "comments"), orderBy("createdAt", "asc"), limit(50));
+      onSnapshot(commentsQ, (snap) => {
+        clist.innerHTML = "";
+        snap.forEach((d) => {
+          const c = d.data();
+          const item = document.createElement("div");
+          item.className = "citem";
+
+          const ca = c.avatarUrl
+            ? `<img alt="ava" src="${escapeAttr(c.avatarUrl)}">`
+            : "";
+
+          item.innerHTML = `
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div class="ava" style="width:30px;height:30px;">${ca || "🙂"}</div>
+              <div style="flex:1;">
+                <div><b>${escapeHtml(c.nick || "user")}</b> <span class="muted">${timeText(c.createdAt)}</span></div>
+                <div style="white-space:pre-wrap;margin-top:4px;">${escapeHtml(c.text || "")}</div>
+              </div>
+            </div>
+          `;
+          clist.appendChild(item);
+        });
+      });
+
+      csend.addEventListener("click", async () => {
+        const t = (cinp.value || "").trim();
+        if (!t) return;
+        cinp.value = "";
+        await addComment(id, t);
+        cwrap.classList.add("on");
+      });
+
+      return el;
+    }
+
+    $("postBtn").addEventListener("click", async () => {
+      if (!currentUser) return;
+
+      const text = ($("postText").value || "").trim();
+      const file = $("postMedia")?.files?.[0] || null;
+
+      if (!text && !file) { status.textContent = "Напиши текст или добавь файл 🙂"; return; }
+
+      try {
+        status.textContent = "Создаю пост…";
+
+        const docRef = await addDoc(postsCol, {
+          authorId: currentUser.uid,
+          authorNick: myProfile.nick || "user",
+          authorAvatarUrl: myProfile.avatarUrl || "",
+          text: text.slice(0, 1500),
+          createdAt: serverTimestamp(),
+          likeCount: 0,
+          dislikeCount: 0,
+          commentCount: 0,
+          mediaUrl: "",
+          mediaType: ""
+        });
+
+        if (file) {
+          status.textContent = "Загружаю файл… 0%";
+          const url = await uploadMediaFile({
+            file,
+            path: `post_media/${docRef.id}/${Date.now()}_${file.name}`,
+            onProgress: (pct) => (status.textContent = `Загружаю файл… ${pct}%`)
+          });
+
+          await updateDoc(docRef, {
+            mediaUrl: url,
+            mediaType: file.type.startsWith("video/") ? "video" : "image"
+          });
+        }
+
+        $("postText").value = "";
+        if ($("postMedia")) $("postMedia").value = "";
+        status.textContent = "Опубликовано ✅";
+        setTimeout(() => (status.textContent = ""), 900);
+
+      } catch (e) {
+        status.textContent = String(e?.message).includes("FILE_TOO_BIG")
+          ? "Файл больше 300 МБ — не пущу."
+          : "Не получилось опубликовать (проверь Firestore/Storage).";
+      }
+    });
+
+    function listenFeed() {
+      const q = query(postsCol, orderBy("createdAt", "desc"), limit(50));
+      onSnapshot(q, (snap) => {
+        feed.innerHTML = "";
+        let count = 0;
+        snap.forEach((d) => {
+          count++;
+          feed.appendChild(renderPost(d.id, d.data()));
+        });
+        feedHint.style.display = count ? "none" : "block";
+      });
+    }
+
+    onAuthStateChanged(auth, async (u) => {
+      if (!u) return;
+      currentUser = u;
+
+      const fallbackNick = (u.email || "user").split("@")[0];
+      myProfile = await loadOrCreateProfile(u.uid, fallbackNick);
+      applyProfileUI(myProfile);
+
+      listenFeed();
+    });
+  </script>
+</body>
+</html>
