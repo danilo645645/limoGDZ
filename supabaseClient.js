@@ -6,8 +6,8 @@
 // const SUPABASE_URL = "https://abcd1234.supabase.co";
 // const SUPABASE_ANON_KEY = "eyJhbGciOi...";
 
-const SUPABASE_URL = "";
-const SUPABASE_ANON_KEY = "";
+const SUPABASE_URL = "https://ptueuuglerakqxeqsgjs.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_YGuwZL_jVOX_cAhoibp-yg_cYIy5EwW";
 
 function _mustConfigured() {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
