@@ -39,25 +39,19 @@
 
   <!-- Тема/цвета как на сайте -->
   <script defer src="theme.js"></script>
-
-  <!-- Firebase auth -->
   <script type="module" src="auth.js"></script>
-
-  <script type="module">
+<script type="module">
     const login = document.getElementById("login");
     const pass = document.getElementById("pass");
     const btn = document.getElementById("btn");
     const err = document.getElementById("err");
     const next = new URLSearchParams(location.search).get("next") || "index.html";
 
-    // ник -> псевдо-email
-    const toEmail = (nick) => `${nick.trim()}@limo.local`;
-
     btn.onclick = async () => {
       err.textContent = "";
       try {
-        const { auth, signInWithEmailAndPassword } = window.__auth;
-        await signInWithEmailAndPassword(auth, toEmail(login.value), pass.value);
+        const res = await window.__auth.login(login.value, pass.value);
+        if (!res.ok) throw new Error(res.reason || "BAD");
         location.href = next;
       } catch {
         err.textContent = "Ошибка входа. Проверь логин/пароль.";
