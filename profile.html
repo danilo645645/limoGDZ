@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <link rel="icon" href="./icon_site.png" type="image/png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Профиль</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .hdr{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding: 10px 14px;
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--bg-color) 78%, transparent);
+      border: 1px solid color-mix(in srgb, var(--ui-color) 20%, transparent);
+      position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px);
+    }
+    .card{
+      background: color-mix(in srgb, var(--bg-color) 72%, transparent);
+      border: 1px solid color-mix(in srgb, var(--ui-color) 18%, transparent);
+      border-radius: 20px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .row{ display:grid; grid-template-columns: 88px 1fr; gap:12px; align-items:center; }
+    .ava{
+      width: 88px; height: 88px; border-radius: 28px;
+      background: color-mix(in srgb, var(--ui-color) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--ui-color) 18%, transparent);
+      overflow:hidden;
+      display:grid; place-items:center;
+      font-size: 28px; font-weight: 800;
+    }
+    .ava img{ width:100%; height:100%; object-fit:cover; display:block; }
+    input{
+      width: 100%;
+      background: color-mix(in srgb, var(--bg-color) 75%, transparent);
+      color: var(--ui-color);
+      border: 1px solid color-mix(in srgb, var(--ui-color) 18%, transparent);
+      border-radius: 16px;
+      padding: 12px;
+      outline: none;
+    }
+    .muted{ opacity:.78; font-size:13px; }
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px; }
+    @media (max-width: 720px){ .grid2{ grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hdr">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a class="btn" href="pipiska.html">← Лента</a>
+        <b>Профиль</b>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <a class="btn" href="create-post.html">+</a>
+        <button class="btn" id="logoutBtn">Выйти</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="ava" id="ava"></div>
+        <div>
+          <div style="font-size:18px;"><b id="titleName">…</b></div>
+          <div class="muted" id="titleNick">@…</div>
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <label class="muted">Отображаемое имя</label>
+      <input id="displayName" placeholder="Как тебя показывать в ленте">
+
+      <div style="height:10px"></div>
+
+      <label class="muted">Аватар (фото)</label>
+      <input id="avatarFile" type="file" accept="image/*">
+
+      <div class="grid2">
+        <button class="btn full" id="saveBtn">Сохранить</button>
+        <a class="btn full" href="pipiska.html">Назад</a>
+      </div>
+
+      <div class="muted" id="status" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <script type="module" src="auth.js"></script>
+  <script type="module" src="guard-pipiska.js"></script>
+  <script type="module" src="profile.js"></script>
+</body>
+</html>
