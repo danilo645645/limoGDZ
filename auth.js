@@ -79,4 +79,3 @@ export function requireAuth({ next = "index.html", loginPage = "login.html" } = 
 
 // Удобный доступ как раньше (через window.__auth)
 window.__auth = { sha256Hex, login, logout, getSession, setSession, clearSession, requireAuth };
-window.__firebaseConfig = firebaseConfig;
