@@ -1,7 +1,4 @@
-// guard-pipiska.js (frontend-only)
-// Если нет сессии — редирект на login и вернём обратно в pipiska.html
-
+// guard-pipiska.js
 import { requireAuth } from "./auth.js";
 
-requireAuth({ next: "pipiska.html" });
-
+requireAuth({ next: "pipiska.html", loginPage: "login.html" });
