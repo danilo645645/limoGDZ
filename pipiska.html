@@ -199,7 +199,11 @@
 
   <!-- тема -->
 <script defer src="theme.js"></script>
+
+<script type="module" src="auth.js"></script>   <!-- ВОТ ЭТО ВАЖНО -->
+<script type="module" src="guard-pipiska.js"></script>
 <script type="module" src="pipiska.js"></script>
+
 <script type="module">
     const CLOUDINARY_CLOUD_NAME = "dfcto3ehn";
     const CLOUDINARY_PRESET_POSTS = "posts_unsigned";
