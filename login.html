@@ -1,22 +1,46 @@
 <!doctype html>
 <html lang="ru">
 <head>
+  <link rel="icon" href="./icon_site.png" type="image/png">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Вход</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
   <div class="card home">
-    <h1>Вход</h1>
+    <a class="btn" href="index.html">← На главную</a>
+    <h1 style="margin-top:12px;">Вход</h1>
 
     <input id="login" placeholder="Логин" style="width:100%;padding:10px;margin:8px 0;">
     <input id="pass" type="password" placeholder="Пароль" style="width:100%;padding:10px;margin:8px 0;">
 
     <button id="btn" class="btn full" style="border:0;cursor:pointer;">Войти</button>
     <p id="err" style="opacity:.85"></p>
+
+    <p class="muted" style="margin-top:10px;">
+      Логин вводи как ник (например: <b>ChlenSosiska</b>), без объявлений @…
+    </p>
   </div>
 
+  <!-- Колесо цветов как на остальных страницах -->
+  <div id="colorWheel">
+    <label title="Подсветка фона">
+      <input id="accentPicker" type="color">
+    </label>
+    <label title="Фон">
+      <input id="bgPicker" type="color">
+    </label>
+    <label title="Интерфейс (текст, обводка, glow)">
+      <input id="uiPicker" type="color">
+    </label>
+  </div>
+
+  <!-- Тема/цвета как на сайте -->
+  <script defer src="theme.js"></script>
+
+  <!-- Firebase auth -->
   <script type="module" src="auth.js"></script>
 
   <script type="module">
@@ -24,10 +48,9 @@
     const pass = document.getElementById("pass");
     const btn = document.getElementById("btn");
     const err = document.getElementById("err");
-
     const next = new URLSearchParams(location.search).get("next") || "index.html";
 
-    // превращаем логин в псевдо-email
+    // ник -> псевдо-email
     const toEmail = (nick) => `${nick.trim()}@limo.local`;
 
     btn.onclick = async () => {
@@ -36,7 +59,7 @@
         const { auth, signInWithEmailAndPassword } = window.__auth;
         await signInWithEmailAndPassword(auth, toEmail(login.value), pass.value);
         location.href = next;
-      } catch (e) {
+      } catch {
         err.textContent = "Ошибка входа. Проверь логин/пароль.";
       }
     };
